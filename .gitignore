@@ -1,4 +1,5 @@
 /.redo/
-/doc/sip2_fields.tmp
-/doc/sip2_fields.txt
+/doc/*.json
+/doc/*.tmp
+/doc/*.txt
 /vendor/
