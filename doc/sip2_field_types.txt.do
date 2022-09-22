@@ -7,13 +7,13 @@ system("redo-ifchange #{source}")
 
 require_relative "../environment"
 
-require "sip2/protocol/fields_parser"
+require "sip2/meta/fields_parser"
 system("redo-ifchange #{$LOADED_FEATURES.last}")
-require "sip2/protocol/fields_transformer"
+require "sip2/meta/fields_transformer"
 system("redo-ifchange #{$LOADED_FEATURES.last}")
 
-parser = Sip2::Protocol::FieldsParser.new
-transform = Sip2::Protocol::FieldsTransformer.new
+parser = Sip2::Meta::FieldsParser.new
+transform = Sip2::Meta::FieldsTransformer.new
 
 File.open(source) do |src|
   intermediate_tree = parser.parse_with_debug(src.read)

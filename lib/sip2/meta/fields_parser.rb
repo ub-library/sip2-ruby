@@ -2,7 +2,7 @@ require 'parslet'
 require 'parslet/convenience'
 
 module Sip2
-  module Protocol
+  module Meta
 
     class FieldsParser < Parslet::Parser
 
