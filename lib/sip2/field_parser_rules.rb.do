@@ -1,11 +1,13 @@
 #!/usr/bin/env ruby
 require 'json'
 
-source="sip2_fields.txt"
+project_root = "../.."
+
+require_relative "#{project_root}/environment"
+
+source="#{project_root}/doc/sip2_fields.txt"
 
 system("redo-ifchange #{source}")
-
-require_relative "../environment"
 
 require "sip2/meta/fields_parser"
 system("redo-ifchange #{$LOADED_FEATURES.last}")
@@ -16,6 +18,7 @@ parser = Sip2::Meta::FieldsParser.new
 transform = Sip2::Meta::FieldsTransformer.new
 
 MODULE_TEMPLATE =<<EOS
+# GENERATED FILE - DO NOT EDIT!
 module Sip2
   module FieldParserRules
 
