@@ -74,28 +74,17 @@ HARDCODED_SUMMARY_RULE =<<EOS.chomp
 EOS
 
 HARDCODED_VALUE_RULES = {
-  checksum: 'ascii_hex_4',
-  circulation_status: '(digit >> digit).as(:int)',
   currency_type: 'match[A-Z].repeat(3,3).as(:str)',
-  fee_type: '(non_zero_digit >> digit).as(:int)',
   hold_mode: '(str("+") | str("-") | str("*")).as(:str)',
-  hold_type: 'non_zero_digit.as(:int)',
   item_properties_ok: 'any_valid.as(:numerical_bool)',
   language: 'digit.repeat(3,3).as(:int)',
   max_print_width: 'digit.repeat(3,3).as(:int)',
   media_type: 'digit.repeat(3,3).as(:int)',
-  ok: 'numerical_bool',
   patron_status: HARDCODED_PATRON_STATUS_RULE,
-  payment_type: '(digit >> digit).as(:int)',
-  protocol_version: '(digit >> str(".") >> digit >> digit).as(:str)',
-  PWD_algorithm: 'any_valid.as(:str)',
   retries_allowed: 'digit.repeat(3,3).as(:int)',
-  security_marker: '(digit >> digit).as(:int)',
   sequence_number: 'digit.as(:int)',
-  status_code: 'match["012"].as(:int)',
   summary: HARDCODED_SUMMARY_RULE,
   timeout_period: 'digit.repeat(3,3).as(:int)',
-  UID_algorithm: 'any_valid.as(:str)',
 }
 
 src = File.read(source)
@@ -103,7 +92,7 @@ intermediate_tree = parser.parse_with_debug(src)
 tree = transform.apply(intermediate_tree)
 
 rules = tree.map do |field|
-  name = field[:name].gsub(%r"[-/]", "").gsub(/ +/, "_").to_sym
+  name = field[:name]
   code = ""
   pipe = ""
   doc = ""
@@ -114,38 +103,16 @@ rules = tree.map do |field|
   end
 
   value_rule = HARDCODED_VALUE_RULES.fetch(name) {
-    "digit.repeat(4,4).as(:int)" if name.to_s.match(/_(count|limit)$/)
+    field[:type] unless field[:type].empty?
   }
 
   if value_rule.nil?
-    case field[:type]
-
-    when "variable-length field"
-
-      value_rule = "variable_length_value"
-
-    when /^1-char.* field: Y or N$/
-
-      value_rule = "bool"
-
-    when /^1-char.* field: Y or N or .*U$/
-
-      value_rule = "y_n_or_u.as(:bool)"
-
-    when "18-char, fixed-length field: YYYYMMDDZZZZHHMMSS"
-
-      value_rule = "timestamp"
-
-    else
-
-      value_rule = sprintf('not_implemented("%s")', field[:type])
-      doc = sprintf(DOC, field.slice(:type, :type_terminator, :doc).merge(name: name.inspect))
-        .gsub(/\n\n\z/, "\n")
-        .gsub(/^/, "# ")
-        .gsub(/\A/, "\n")
-        .gsub(/\n\z/, "\n#")
-
-    end
+    value_rule = sprintf('not_implemented("%s")', field[:type])
+    doc = sprintf(DOC, field.slice(:type, :type_terminator, :doc).merge(name: name.inspect))
+      .gsub(/\n\n\z/, "\n")
+      .gsub(/^/, "# ")
+      .gsub(/\A/, "\n")
+      .gsub(/\n\z/, "\n#")
   end
 
   sprintf(RULE_TEMPLATE, name: name.inspect, code: code, value_rule: value_rule, pipe: pipe, doc: doc)

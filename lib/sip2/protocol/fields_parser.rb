@@ -20,7 +20,13 @@ module Sip2
 
       rule(:type_terminator) { (period | semicolon) >> (space | eol) }
 
+      rule(:not_type_end) {
+        type_terminator.absent? >> newline.absent? >> any
+      }
+
       rule(:empty_line) { spaces.maybe >> newline }
+
+      rule(:digit) { match["0-9"] }
 
       rule(:lowercase) { match["a-z"] }
 
@@ -34,17 +40,50 @@ module Sip2
 
       rule(:name) {
         ( name_uppercase_part.maybe >> name_lowercase_part)
-          .as(:str).as(:name)
+          .as(:sym).as(:name)
       }
 
       rule(:code) {
         match["A-Z"].repeat(2,2).as(:str).as(:code)
       }
 
+      rule(:flf_indicator) {
+        str("-char") >>
+        str(",").maybe >>
+        space >>
+        (str("fixed-length ") | str("fixed length ")).maybe >>
+        str("field") >>
+        str(":").maybe >>
+        space.maybe
+      }
+
+      rule(:fixed_length_field) {
+        (
+          digit.repeat(1,2).as(:int).as(:flf_length) >>
+          flf_indicator >>
+          not_type_end.repeat.as(:str).as(:flf_constraint)
+        )
+      }
+
+      rule(:variable_length_field) {
+        str("variable-length field").as(:variable_length_field)
+      }
+
+      rule(:fixed_length_checksum) {
+        digit.repeat(1,2).as(:int).as(:flf_length) >>
+        str("-char, fixed-length message ") >>
+        str("checksum").as(:flf_constraint) >>
+        str(", ")
+      }
+
+      rule(:unclassified_field) {
+        not_type_end.repeat(1).as(:str)
+      }
+
       rule(:type) {
         (
-          (type_terminator.absent? >> newline.absent? >> any).repeat(1)
-        ).as(:str).as(:type) >>
+          variable_length_field | fixed_length_field | fixed_length_checksum | unclassified_field
+        ).as(:type) >>
         type_terminator.maybe.as(:str).as(:type_terminator)
       }
 
