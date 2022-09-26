@@ -1,9 +1,15 @@
 # GENERATED FILE - DO NOT EDIT!
+require 'parslet'
+require 'sip2/parser_atoms.rb'
+
 module Sip2
   module FieldParserRules
+    include Parslet
 
-    rule(:ACS_renewal_policy) {
-      bool.as(:ACS_renewal_policy)
+    include Sip2::ParserAtoms
+
+    rule(:acs_renewal_policy) {
+      bool.as(:acs_renewal_policy)
     }
 
     rule(:alert) {
@@ -31,11 +37,11 @@ module Sip2
     }
 
     rule(:charged_items_count) {
-      digit.repeat(4,4).as(:int).as(:charged_items_count)
+      four_digits_or_blanks.as(:charged_items_count)
     }
 
     rule(:charged_items_limit) {
-      str("CB") >> digit.repeat(4,4).as(:int).as(:charged_items_limit) >> pipe
+      str("CB") >> four_digits_or_blanks.as(:charged_items_limit) >> pipe
     }
 
     rule(:checkin_ok) {
@@ -55,7 +61,7 @@ module Sip2
     }
 
     rule(:currency_type) {
-      str("BH") >> match[A-Z].repeat(3,3).as(:str).as(:currency_type) >> pipe
+      str("BH") >> match["A-Z"].repeat(3,3).as(:str).as(:currency_type) >> pipe
     }
 
     rule(:current_location) {
@@ -107,7 +113,7 @@ module Sip2
     }
 
     rule(:fee_type) {
-      str("BT") >> (digit >> digit).as(:natural).as(:fee_type) >> pipe
+      str("BT") >> ((zero >> natural) | (natural >> digit)).as(:int).as(:fee_type) >> pipe
     }
 
     rule(:fine_items) {
@@ -115,7 +121,7 @@ module Sip2
     }
 
     rule(:fine_items_count) {
-      digit.repeat(4,4).as(:int).as(:fine_items_count)
+      four_digits_or_blanks.as(:fine_items_count)
     }
 
     rule(:hold_items) {
@@ -123,11 +129,11 @@ module Sip2
     }
 
     rule(:hold_items_count) {
-      digit.repeat(4,4).as(:int).as(:hold_items_count)
+      four_digits_or_blanks.as(:hold_items_count)
     }
 
     rule(:hold_items_limit) {
-      str("BZ") >> digit.repeat(4,4).as(:int).as(:hold_items_limit) >> pipe
+      str("BZ") >> four_digits_or_blanks.as(:hold_items_limit) >> pipe
     }
 
     rule(:hold_mode) {
@@ -143,7 +149,7 @@ module Sip2
     }
 
     rule(:hold_type) {
-      str("BY") >> natural.as(:hold_type) >> pipe
+      str("BY") >> natural.as(:int).as(:hold_type) >> pipe
     }
 
     rule(:home_address) {
@@ -203,7 +209,7 @@ module Sip2
     }
 
     rule(:nb_due_date) {
-      timestamp.as(:nb_due_date)
+      (timestamp | space.repeat(18,18).as(:nil)).as(:nb_due_date)
     }
 
     rule(:no_block) {
@@ -227,11 +233,11 @@ module Sip2
     }
 
     rule(:overdue_items_count) {
-      digit.repeat(4,4).as(:int).as(:overdue_items_count)
+      four_digits_or_blanks.as(:overdue_items_count)
     }
 
     rule(:overdue_items_limit) {
-      str("CA") >> digit.repeat(4,4).as(:int).as(:overdue_items_limit) >> pipe
+      str("CA") >> four_digits_or_blanks.as(:overdue_items_limit) >> pipe
     }
 
     rule(:owner) {
@@ -293,8 +299,8 @@ module Sip2
       (digit >> str(".") >> digit >> digit).as(:str).as(:protocol_version)
     }
 
-    rule(:PWD_algorithm) {
-      any_valid.as(:str).as(:PWD_algorithm)
+    rule(:pwd_algorithm) {
+      any_valid.as(:str).as(:pwd_algorithm)
     }
 
     rule(:queue_position) {
@@ -310,7 +316,7 @@ module Sip2
     }
 
     rule(:recall_items_count) {
-      digit.repeat(4,4).as(:int).as(:recall_items_count)
+      four_digits_or_blanks.as(:recall_items_count)
     }
 
     rule(:renewal_ok) {
@@ -318,7 +324,7 @@ module Sip2
     }
 
     rule(:renewed_count) {
-      digit.repeat(4,4).as(:int).as(:renewed_count)
+      four_digits_or_blanks.as(:renewed_count)
     }
 
     rule(:renewed_items) {
@@ -337,8 +343,8 @@ module Sip2
       timestamp.as(:return_date)
     }
 
-    rule(:SC_renewal_policy) {
-      bool.as(:SC_renewal_policy)
+    rule(:sc_renewal_policy) {
+      bool.as(:sc_renewal_policy)
     }
 
     rule(:screen_message) {
@@ -381,10 +387,7 @@ module Sip2
         bool_with_space.as(:fine_items) >>
         bool_with_space.as(:recall_items) >>
         bool_with_space.as(:unavailable_holds) >>
-        y_or_space >>
-        y_or_space >>
-        y_or_space >>
-        y_or_space
+        match["Y "].repeat(4,4)
       ).as(:summary)
     }
 
@@ -420,12 +423,12 @@ module Sip2
       str("BK") >> variable_length_value.as(:transaction_id) >> pipe
     }
 
-    rule(:UID_algorithm) {
-      any_valid.as(:str).as(:UID_algorithm)
+    rule(:uid_algorithm) {
+      any_valid.as(:str).as(:uid_algorithm)
     }
 
     rule(:unavailable_holds_count) {
-      digit.repeat(4,4).as(:int).as(:unavailable_holds_count)
+      four_digits_or_blanks.as(:unavailable_holds_count)
     }
 
     rule(:unavailable_hold_items) {
@@ -433,7 +436,7 @@ module Sip2
     }
 
     rule(:unrenewed_count) {
-      digit.repeat(4,4).as(:int).as(:unrenewed_count)
+      four_digits_or_blanks.as(:unrenewed_count)
     }
 
     rule(:unrenewed_items) {
@@ -448,5 +451,19 @@ module Sip2
       str("CQ") >> bool.as(:valid_patron_password) >> pipe
     }
 
+    rule(:fee_type_fixed) {
+      ((zero >> natural) | (natural >> digit)).as(:int).as(:fee_type_fixed)
+    }
+
+    rule(:items) {
+      (
+        hold_items.repeat(1).as(:hold_items) |
+        overdue_items.repeat(1).as(:overdue_items) |
+        charged_items.repeat(1).as(:charged_items) |
+        fine_items.repeat(1).as(:fine_items) |
+        recall_items.repeat(1).as(:recall_items) |
+        unavailable_hold_items.repeat(1).as(:unavailable_hold_items)
+      )
+    }
   end
 end
