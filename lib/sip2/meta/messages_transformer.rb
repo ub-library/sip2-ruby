@@ -23,6 +23,12 @@ module Sip2
         x.join("_").downcase.gsub(%r"[-/]", "").gsub(/ +/, "_").gsub(/_+/, "_")
       }
 
+      rule(name: simple(:x)) {
+        {
+          text: String(x),
+          code: String(x).downcase.gsub(" ", "_")
+        }
+      }
 
       rule(field_names: sequence(:x)) {
         if (fee_type_pos = x.index("fee_type"))
