@@ -11,7 +11,7 @@ module Sip2
       rule(str: simple(:x)) { String(x) }
 
       rule(sym: simple(:x)) {
-        String(x).gsub(%r"[-/]", "").gsub(/ +/, "_").to_sym
+        String(x).downcase.gsub(%r"[-/]", "").gsub(/ +/, "_").to_sym
       }
 
       rule(str: sequence(:x)) { x.empty? ? "" : x }
