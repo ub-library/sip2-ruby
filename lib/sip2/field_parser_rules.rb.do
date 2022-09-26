@@ -19,8 +19,14 @@ transform = Sip2::Meta::FieldsTransformer.new
 
 MODULE_TEMPLATE =<<EOS
 # GENERATED FILE - DO NOT EDIT!
+require 'parslet'
+require 'sip2/parser_atoms.rb'
+
 module Sip2
   module FieldParserRules
+    include Parslet
+
+    include Sip2::ParserAtoms
 
 %<rules>s
 
