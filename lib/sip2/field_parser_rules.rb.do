@@ -69,10 +69,7 @@ HARDCODED_SUMMARY_RULE =<<EOS.chomp
     bool_with_space.as(:fine_items) >>
     bool_with_space.as(:recall_items) >>
     bool_with_space.as(:unavailable_holds) >>
-    y_or_space >>
-    y_or_space >>
-    y_or_space >>
-    y_or_space
+    match["Y "].repeat(4,4)
   )
 EOS
 
