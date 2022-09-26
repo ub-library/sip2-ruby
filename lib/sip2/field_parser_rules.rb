@@ -1,4 +1,3 @@
-# GENERATED FILE - DO NOT EDIT!
 require 'parslet'
 require 'sip2/parser_atoms.rb'
 
