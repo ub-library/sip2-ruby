@@ -41,7 +41,7 @@ module Sip2
         else
           case length
           when 4
-            "digit.repeat(4,4).as(:int)"
+            "four_digits_or_blanks"
           when 1
             "any_valid.as(:str)"
           else
