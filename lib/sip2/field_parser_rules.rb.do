@@ -74,7 +74,7 @@ HARDCODED_SUMMARY_RULE =<<EOS.chomp
 EOS
 
 HARDCODED_VALUE_RULES = {
-  currency_type: 'match[A-Z].repeat(3,3).as(:str)',
+  currency_type: 'match["A-Z"].repeat(3,3).as(:str)',
   hold_mode: '(str("+") | str("-") | str("*")).as(:str)',
   item_properties_ok: 'any_valid.as(:numerical_bool)',
   language: 'digit.repeat(3,3).as(:int)',
