@@ -34,6 +34,15 @@ module Sip2
       ((zero >> natural) | (natural >> digit)).as(:int).as(:fee_type_fixed)
     }
 
+    rule(:items) {
+      (
+        hold_items.repeat(1).as(:hold_items) |
+        overdue_items.repeat(1).as(:overdue_items) |
+        charged_items.repeat(1).as(:charged_items) |
+        fine_items.repeat(1).as(:fine_items) |
+        recall_items.repeat(1).as(:recall_items) |
+        unavailable_hold_items.repeat(1).as(:unavailable_hold_items)
+      )
     }
   end
 end
