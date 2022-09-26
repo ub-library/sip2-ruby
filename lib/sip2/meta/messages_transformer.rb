@@ -6,9 +6,19 @@ module Sip2
 
     class MessagesTransformer < Parslet::Transform
 
-      rule(field_name_part: simple(:x)) { String(x).gsub(%r|[/-]|,"") }
+      rule(str: simple(:x)) { String(x) }
 
-      rule(field_name: sequence(:x)) { x.join("_").gsub(/_+/, "_") }
+      rule(str: sequence(:x)) { x.empty? ? "" : x }
+
+      rule(sym: simple(:x)) {
+        String(x).downcase.gsub(%r"[-/]", "").gsub(/ +/, "_").to_sym
+      }
+
+      rule(sym: sequence(:x)) {
+        x.join("_").downcase.gsub(%r"[-/]", "").gsub(/ +/, "_").gsub(/_+/, "_")
+      }
+
+
 
     end
 

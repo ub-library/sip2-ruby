@@ -37,26 +37,26 @@ module Sip2
       rule(:uppercase) { match["A-Z"] }
       rule(:letter) { lowercase | uppercase }
 
-      rule(:message_code) { match("[0-9]").repeat(2,2) }
+      rule(:message_code) { match("[0-9]").repeat(2,2).as(:str) }
       rule(:field_start) { str("<") }
       rule(:field_end) { str(">") }
 
       rule(:field_name) {
         (
           spaces.maybe >>
-          (letter | dash | slash ).repeat(1).as(:field_name_part) >>
+          (letter | dash | slash ).repeat(1).as(:str) >>
           (spaces.maybe >> newline.maybe >> spaces.maybe)
-        ).repeat(1)
+        ).repeat(1).as(:sym)
       }
 
       rule(:fields) {
-        (field_start >> field_name.as(:field_name) >> field_end).repeat
+        (field_start >> field_name >> field_end).repeat
       }
 
       rule(:message_format) {
         spaces.maybe >>
         message_code.as(:message_code) >>
-        fields.as(:fields) >>
+        fields.as(:field_names).as(:fields) >>
         newline
       }
 
@@ -68,7 +68,7 @@ module Sip2
 
       rule(:message_name) {
         (spaces.maybe >> v2.maybe >> spaces.maybe) >>
-        (message_name_part >> (space.maybe >> message_name_part).repeat).as(:message_name) >>
+        (message_name_part >> (space.maybe >> message_name_part).repeat).as(:name).as(:message_name) >>
         spaces.maybe >>
         newline
       }
