@@ -30,6 +30,11 @@ module Sip2
 
 %<rules>s
 
+    rule(:fee_type_fixed) {
+      ((zero >> natural) | (natural >> digit)).as(:int).as(:fee_type_fixed)
+    }
+
+    }
   end
 end
 EOS
