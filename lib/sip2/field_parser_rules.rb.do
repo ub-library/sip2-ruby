@@ -80,6 +80,7 @@ HARDCODED_VALUE_RULES = {
   language: 'digit.repeat(3,3).as(:int)',
   max_print_width: 'digit.repeat(3,3).as(:int)',
   media_type: 'digit.repeat(3,3).as(:int)',
+  nb_due_date: '(timestamp | space.repeat(18,18).as(:nil))',
   patron_status: HARDCODED_PATRON_STATUS_RULE,
   retries_allowed: 'digit.repeat(3,3).as(:int)',
   sequence_number: 'digit.as(:int)',
