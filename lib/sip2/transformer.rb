@@ -7,6 +7,7 @@ module Sip2
   class Transformer < Parslet::Transform
 
     rule(nil: simple(:_)) { nil }
+    rule(empty_hash: simple(:_)) { {} }
 
     rule(int: simple(:x)) { Integer(x) }
 
@@ -24,6 +25,7 @@ module Sip2
         false
       end
     }
+
 
     rule(tz: simple(:x)) {
       tz = String(x).strip
@@ -60,18 +62,12 @@ module Sip2
     end
 
     rule(
-      message_identifiers: subtree(:ids),
-      ordered_fields: subtree(:ordered)
+      message_identifiers: subtree(:m),
+      ordered_fields: subtree(:o),
+      delimited_fields: subtree(:d),
+      error_detection: subtree(:e)
     ) {
-      ids.merge(ordered)
-    }
-
-    rule(
-      message_identifiers: subtree(:ids),
-      ordered_fields: subtree(:ordered),
-      delimited_fields: subtree(:delimited)
-    ) {
-      ids.merge(ordered).merge(delimited)
+      [m, o, d, e].reduce { |res,el| res.merge(el) }
     }
 
 

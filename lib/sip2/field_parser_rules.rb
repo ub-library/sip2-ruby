@@ -52,7 +52,7 @@ module Sip2
     }
 
     rule(:checksum) {
-      str("AZ") >> hex_digit.repeat(4,4).as(:str).as(:checksum) >> pipe
+      str("AZ") >> hex_digit.repeat(4,4).as(:str).as(:checksum)
     }
 
     rule(:circulation_status) {
@@ -359,7 +359,7 @@ module Sip2
     }
 
     rule(:sequence_number) {
-      str("AY") >> digit.as(:int).as(:sequence_number) >> pipe
+      str("AY") >> digit.as(:int).as(:sequence_number)
     }
 
     rule(:sort_bin) {

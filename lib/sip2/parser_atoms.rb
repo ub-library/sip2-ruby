@@ -8,6 +8,8 @@ module Sip2
     rule(:natural) { match["1-9"] }
     rule(:zero) { str("0") } 
 
+    rule(:hex_digit) { match["0-9A-F"] }
+
     rule(:space) { str(" ") }
     rule(:pipe) { str("|") }
     rule(:upper) { match["A-Z"] }
