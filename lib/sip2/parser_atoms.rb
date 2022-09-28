@@ -40,7 +40,7 @@ module Sip2
     }
 
     rule(:variable_length_value) {
-      (pipe.absent? >> any).repeat.as(:str)
+      (pipe.absent? >> any).repeat(0,255).as(:str)
     }
 
   end
