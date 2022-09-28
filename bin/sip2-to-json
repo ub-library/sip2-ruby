@@ -3,23 +3,79 @@
 require_relative '../environment'
 
 require 'json'
+require 'optparse'
 require 'sip2/parser'
 require 'sip2/transformer'
+
+options = {
+  continue_on_error: false,
+  debug: false,
+  line_by_line: true,
+}
+OptionParser.new do |opts|
+  opts.banner = "Usage: #{$0} [options]"
+  opts.separator ""
+  opts.separator "Options:"
+
+  opts.on("-a", "--all", "Parse all messages into a JSON array.") do
+    options[:line_by_line] = false
+  end
+
+  opts.on("-c", "--continue-on-error",
+          "When parsing a line fails, continue with the next.",
+          "The exit code will still be non-zero.",
+          'This option does not apply when using `--all`.'
+         ) do
+    options[:continue_on_error] = true
+  end
+
+  opts.on("-D", "--debug", "Report errors with a parse tree.") do
+    options[:debug] = true
+  end
+
+  opts.on("-h", "--help", "Display this message.") do
+    puts opts
+    exit
+  end
+
+end.parse!
 
 parser = Sip2::Parser.new
 transformer = Sip2::Transformer.new
 
 parse = ->(data) {
-  intermediate_tree = parser.parse_with_debug(data)
+  intermediate_tree = parser.parse(data)
   transformer.apply(intermediate_tree)
 }
 
-if ARGV.first == "-1"
-  ARGV.shift
-
-  ARGF.each_line do |data|
-    puts parse.call(data).first.to_json
+if options[:line_by_line]
+  error_count = 0
+  ARGF.each_line.with_index(1) do |data,i|
+    begin 
+      puts parse.call(data).first.to_json
+    rescue Parslet::ParseFailed => error
+      warn "Error parsing line #{i}: #{data.dump}"
+      warn error.parse_failure_cause.ascii_tree if options[:debug]
+      if options[:continue_on_error]
+        error_count += 1
+      else
+        raise error
+      end
+    end
+  end
+  if error_count > 0
+    warn sprintf(
+      "WARNING: %d line%s could not be parsed",
+      error_count,
+      error_count == 1 ? "" : "s"
+    )
+    exit 1
   end
 else
-  puts parse.call(ARGF.read).to_json
+  begin
+    puts parse.call(ARGF.read).to_json
+  rescue Parslet::ParseFailed => error
+    warn error.parse_failure_cause.ascii_tree if options[:debug]
+    raise error
+  end
 end
