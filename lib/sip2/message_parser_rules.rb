@@ -1,5 +1,6 @@
 require 'parslet'
 require 'sip2/field_parser_rules'
+require 'sip2/message_types'
 
 module Sip2
   module MessageParserRules
@@ -28,6 +29,23 @@ module Sip2
 
     rule(:checksum_only) {
       ( checksum | empty_hash ).as(:error_detection)
+    }
+
+    rule(:known_message_id) {
+      Sip2::MESSAGE_TYPES.keys.map { |s| str(s) }.inject { |res,a| res | a }
+    }
+
+    # A *command identifier* is defined as "two ASCII-characters". Theoretically
+    # that means any ASCII-character except for the NULL-character (which is
+    # disallowed) and carriage return (which might only be used as message
+    # terminator).
+    #
+    # However, all existing messages have two digit identifiers. It is highly
+    # unlikely that punctuation will be used as command identifiers. For
+    # simplicity we reduce the accepted character range to digits and letters.
+    #
+    rule(:unknown_message_id) {
+      known_message_id.absent? >> match["0-9A-Za-z"].repeat(2,2)
     }
 
     # Block Patron (01)
@@ -309,6 +327,11 @@ module Sip2
         eom
     }
 
+    # Messages with unknown ID:s should be accepted and ignored
+    rule(:unknown_message) {
+      (unknown_message_id >> (eom.absent? >> any).repeat).as(:str).as(:unknown_message) >> eom
+    }
+
     rule(:messages) {
       ((
         block_patron |
@@ -341,7 +364,8 @@ module Sip2
         request_sc_resend |
         request_acs_resend |
         acs_status |
-        sc_status
+        sc_status |
+        unknown_message
       ) >> newline.maybe).repeat(1)
     }
 
