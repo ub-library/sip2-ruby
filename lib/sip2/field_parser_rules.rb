@@ -40,7 +40,7 @@ module Sip2
     }
 
     rule(:charged_items_limit) {
-      str("CB") >> four_digits_or_blanks.as(:charged_items_limit) >> pipe
+      str("CB") >> digit.repeat(4,4).as(:int).as(:charged_items_limit) >> pipe
     }
 
     rule(:checkin_ok) {
@@ -132,7 +132,7 @@ module Sip2
     }
 
     rule(:hold_items_limit) {
-      str("BZ") >> four_digits_or_blanks.as(:hold_items_limit) >> pipe
+      str("BZ") >> digit.repeat(4,4).as(:int).as(:hold_items_limit) >> pipe
     }
 
     rule(:hold_mode) {
@@ -236,7 +236,7 @@ module Sip2
     }
 
     rule(:overdue_items_limit) {
-      str("CA") >> four_digits_or_blanks.as(:overdue_items_limit) >> pipe
+      str("CA") >> digit.repeat(4,4).as(:int).as(:overdue_items_limit) >> pipe
     }
 
     rule(:owner) {
@@ -323,7 +323,7 @@ module Sip2
     }
 
     rule(:renewed_count) {
-      four_digits_or_blanks.as(:renewed_count)
+      digit.repeat(4,4).as(:int).as(:renewed_count)
     }
 
     rule(:renewed_items) {
@@ -435,7 +435,7 @@ module Sip2
     }
 
     rule(:unrenewed_count) {
-      four_digits_or_blanks.as(:unrenewed_count)
+      digit.repeat(4,4).as(:int).as(:unrenewed_count)
     }
 
     rule(:unrenewed_items) {
