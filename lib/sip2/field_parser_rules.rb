@@ -115,6 +115,10 @@ module Sip2
       str("BT") >> ((zero >> natural) | (natural >> digit)).as(:int).as(:fee_type) >> pipe
     }
 
+    rule(:fee_type_fixed) {
+      ((zero >> natural) | (natural >> digit)).as(:int).as(:fee_type_fixed)
+    }
+
     rule(:fine_items) {
       str("AV") >> variable_length_value.as(:fine_items) >> pipe
     }
@@ -173,6 +177,17 @@ module Sip2
 
     rule(:item_properties_ok) {
       any_valid.as(:numerical_bool).as(:item_properties_ok)
+    }
+
+    rule(:items) {
+      (
+        hold_items.repeat(1).as(:hold_items) |
+        overdue_items.repeat(1).as(:overdue_items) |
+        charged_items.repeat(1).as(:charged_items) |
+        fine_items.repeat(1).as(:fine_items) |
+        recall_items.repeat(1).as(:recall_items) |
+        unavailable_hold_items.repeat(1).as(:unavailable_hold_items)
+      )
     }
 
     rule(:language) {
@@ -448,21 +463,6 @@ module Sip2
 
     rule(:valid_patron_password) {
       str("CQ") >> bool.as(:valid_patron_password) >> pipe
-    }
-
-    rule(:fee_type_fixed) {
-      ((zero >> natural) | (natural >> digit)).as(:int).as(:fee_type_fixed)
-    }
-
-    rule(:items) {
-      (
-        hold_items.repeat(1).as(:hold_items) |
-        overdue_items.repeat(1).as(:overdue_items) |
-        charged_items.repeat(1).as(:charged_items) |
-        fine_items.repeat(1).as(:fine_items) |
-        recall_items.repeat(1).as(:recall_items) |
-        unavailable_hold_items.repeat(1).as(:unavailable_hold_items)
-      )
     }
   end
 end
