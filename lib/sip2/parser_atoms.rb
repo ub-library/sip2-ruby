@@ -8,6 +8,11 @@ module Sip2
     rule(:natural) { match["1-9"] }
     rule(:zero) { str("0") } 
 
+    rule(:eom) { str("\r") }
+    rule(:nullc) { str("\0") }
+    rule(:delim) { str("|") }
+    rule(:any_valid) { eom.absent? >> nullc.absent? >> delim.absent? >> any }
+
     rule(:hex_digit) { match["0-9A-F"] }
 
     rule(:space) { str(" ") }

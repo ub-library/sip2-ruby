@@ -8,7 +8,6 @@ module Sip2
 
     include Sip2::FieldParserRules
 
-    rule(:eom) { str("\r") }
     rule(:newline) { str("\n") }
 
     rule(:empty_hash) {
