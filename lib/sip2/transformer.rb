@@ -11,6 +11,8 @@ module Sip2
 
     rule(int: simple(:x)) { Integer(x) }
 
+    rule(int: sequence(:x)) { x.empty? ? "0" : x }
+
     rule(str: simple(:x)) { String(x) }
 
     rule(str: sequence(:x)) { x.empty? ? "" : x }

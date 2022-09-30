@@ -7,6 +7,16 @@ module Sip2
 
   format_int_2 = ->(v) { sprintf('%02d', v) }
 
+  format_int_3 = ->(v) { sprintf('%03d', v) }
+
+  format_int_4 = ->(v) { sprintf('%04d', v) }
+
+  format_int_4_or_blank = ->(v) { v.nil? ? "    " : sprintf("%04d", v) }
+
+  format_nillable_bool = ->(v) { v.nil? ? 'U' : format_bool.(v) }
+
+  format_int_4 = ->(v) { sprintf('%04d', v) }
+
   format_int_4_or_blank = ->(v) { v.nil? ? "    " : sprintf("%04d", v) }
 
   format_nillable_bool = ->(v) { v.nil? ? 'U' : format_bool.(v) }
@@ -78,7 +88,7 @@ module Sip2
     charged_items_limit: {
       code: "CB",
       type: Types::Integer.constrained(included_in: 0..9999),
-      format: format_int_4_or_blank,
+      format: format_int_4,
     },
 
     checkin_ok: {
@@ -216,7 +226,7 @@ module Sip2
     hold_items_limit: {
       code: "BZ",
       type: Types::Integer.constrained(included_in: 0..9999),
-      format: format_int_4_or_blank,
+      format: format_int_4,
     },
 
     hold_mode: {
@@ -279,10 +289,14 @@ module Sip2
       format: format_string,
     },
 
+    # TODO: Handle nested hash
+    items: {
+    },
+
     language: {
       code: "",
-      type: Types::String.constrained(size: 3),
-      format: format_string,
+      type: Types::Integer.constrained(included_in: (0..999)),
+      format: format_int_3,
     },
 
     library_name: {
@@ -317,14 +331,14 @@ module Sip2
 
     max_print_width: {
       code: "",
-      type: Types::String.constrained(size: 3),
-      format: format_string,
+      type: Types::Integer.constrained(included_in: 0..999),
+      format: format_int_3,
     },
 
     media_type: {
       code: "CK",
-      type: Types::String.constrained(size: 3),
-      format: format_string,
+      type: Types::Integer.constrained(included_in: 0..999),
+      format: format_int_3,
     },
 
     nb_due_date: {
@@ -372,7 +386,7 @@ module Sip2
     overdue_items_limit: {
       code: "CA",
       type: Types::Integer.constrained(included_in: 0..9999),
-      format: format_int_4_or_blank,
+      format: format_int_4,
     },
 
     owner: {
@@ -393,6 +407,7 @@ module Sip2
       format: format_string,
     },
 
+    # TODO: Handle nested schema
     patron_status: {
       code: "",
       type: Types::String.constrained(size: 14),
@@ -449,7 +464,7 @@ module Sip2
 
     queue_position: {
       code: "BR",
-      type: Types::String.constrained(max_size: 255),
+      type: Types::Integer.constrained(gteq: 0).optional,
       format: format_string,
     },
 
@@ -497,8 +512,8 @@ module Sip2
 
     retries_allowed: {
       code: "",
-      type: Types::String.constrained(size: 3),
-      format: format_string,
+      type: Types::Integer.constrained(included_in: 0..999),
+      format: format_int_3,
     },
 
     return_date: {
@@ -533,7 +548,7 @@ module Sip2
 
     sequence_number: {
       code: "AY",
-      type: Types::String.constrained(size: 1),
+      type: Types::Integer.constrained(included_in: 0..9),
       format: format_string,
     },
 
@@ -561,6 +576,7 @@ module Sip2
       format: format_bool,
     },
 
+    # TODO: Handled nested hash
     summary: {
       code: "",
       type: Types::String.constrained(size: 10),
@@ -593,8 +609,8 @@ module Sip2
 
     timeout_period: {
       code: "",
-      type: Types::String.constrained(size: 3),
-      format: format_string,
+      type: Types::Integer.constrained(included_in: 0..999),
+      format: format_int_3,
     },
 
     title_identifier: {
@@ -636,7 +652,7 @@ module Sip2
     unrenewed_count: {
       code: "",
       type: Types::Integer.constrained(included_in: 0..9999),
-      format: format_int_4_or_blank,
+      format: format_int_4,
     },
 
     unrenewed_items: {

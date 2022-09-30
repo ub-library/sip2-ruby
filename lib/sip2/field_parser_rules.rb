@@ -318,7 +318,7 @@ module Sip2
     }
 
     rule(:queue_position) {
-      str("BR") >> variable_length_value.as(:queue_position) >> pipe
+      str("BR") >> digit.repeat.as(:int).as(:queue_position) >> pipe
     }
 
     rule(:recall_date) {
