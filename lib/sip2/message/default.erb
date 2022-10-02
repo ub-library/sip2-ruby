@@ -1,0 +1,39 @@
+<%
+    require 'json'
+    msg = JSON.parse(File.read(src))
+    class_name = message.split("_").map(&:capitalize).join
+
+    fields = msg.fetch("fields")
+    ordered = fields.fetch("ordered") { [] }
+    delimited = fields.fetch("delimited") { [] }
+
+
+-%>
+require 'sip2/message/base_message'
+
+module Sip2
+  module Message
+    class <%= class_name %> < BaseMessage
+
+      CODE = "<%= msg["message_code"] %>".freeze
+      NAME = "<%= msg["message_name"]["text"] %>".freeze
+
+      attribute :message_code, Types::String.constrained(eql: CODE).default(CODE)
+      attribute :message_name, Types::String.constrained(eql: NAME).default(NAME)
+
+      # Required ordered fixed length fields
+% ordered.each do |field|
+      field :<%= field %>
+% end
+
+      # Required delimited fields
+% delimited.each do |field|
+      field :<%= field %>
+% end
+
+      # Optional delimited fields
+      # TODO: Move optional fields here, and use `field?`
+
+    end
+  end
+end
