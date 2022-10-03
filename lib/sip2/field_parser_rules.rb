@@ -187,7 +187,7 @@ module Sip2
         fine_items.repeat(1).as(:fine_items) |
         recall_items.repeat(1).as(:recall_items) |
         unavailable_hold_items.repeat(1).as(:unavailable_hold_items)
-      )
+      ).as(:items)
     }
 
     rule(:language) {

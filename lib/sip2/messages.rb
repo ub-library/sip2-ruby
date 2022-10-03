@@ -80,13 +80,13 @@ module Sip2
         patron_identifier
         item_identifier
         terminal_password
+      ],
+      optional_delimited_fields: %i[
         patron_password
         item_properties
         fee_acknowledged
         cancel
       ],
-      # TODO: Move any optional fields for Checkout here
-      optional_delimited_fields: [],
     },
     {
       code: "12",

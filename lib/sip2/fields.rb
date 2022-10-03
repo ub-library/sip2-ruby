@@ -1,3 +1,4 @@
+require 'dry-types'
 module Sip2
   module Types
     include Dry.Types()
@@ -199,6 +200,12 @@ module Sip2
       format: format_int_2,
     },
 
+    fee_type_fixed: {
+      code: "",
+      type: Types::Integer.constrained(included_in: 1..99),
+      format: format_int_2,
+    },
+
     fine_items: {
       code: "AV",
       type: Types::String.constrained(max_size: 255),
@@ -291,6 +298,9 @@ module Sip2
 
     # TODO: Handle nested hash
     items: {
+      type: Types::Hash.schema(
+        charged_items: Types::String.constrained(max_size: 255),
+      )
     },
 
     language: {

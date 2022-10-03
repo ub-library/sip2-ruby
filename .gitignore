@@ -1,4 +1,2 @@
 /.redo/
-/lib/sip2/message/*.json
-/lib/sip2/message/*.rb
 /vendor/

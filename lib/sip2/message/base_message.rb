@@ -12,36 +12,13 @@ module Sip2
 
       class << self
 
-        def inherited(subclass)
-          subclass.instance_eval {
-            @fields = []
-          }
-          super
-        end
-
-        def field(f)
-          field = Sip2::FIELDS.fetch(f)
-          @fields << field.merge(symbol: f)
-
-          attribute f, field[:type] 
-        end
-
-        def field?(field)
-          field_info = Sip2::FIELDS.fetch(field)
-          @fields << field_info.merge(symbol: field)
-          attribute? field, field_info[:type] 
-        end
-
-        def fields
-          @fields
-        end
-
         def ordered_fields
-          @ordered_fields ||= fields.select { |f| f[:code] == "" }
+          @ordered_fields
         end
 
         def delimited_fields
-          @delimited_fields ||= fields.reject { |f| f[:code] == "" }
+          @delimited_fields ||=
+            @required_delimited_fields + @optional_delimited_fields
         end
 
       end
@@ -58,9 +35,9 @@ module Sip2
         self.class.delimited_fields
       end
 
-      def format_field(field_info)
+      def format_field(field_name)
+        field_info = Sip2::FIELDS.fetch(field_name)
         code = field_info[:code]
-        field_name = field_info.fetch(:symbol)
         format = field_info.fetch(:format)
 
         if code != ""
