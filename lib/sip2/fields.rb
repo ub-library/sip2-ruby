@@ -84,7 +84,7 @@ module Sip2
 
     charged_items_count: {
       code: "",
-      type: Types::Integer.constrained(included_in: 0..9999),
+      type: Types::Integer.constrained(included_in: 0..9999).optional,
       format: format_int_4_or_blank,
     },
 
@@ -216,7 +216,7 @@ module Sip2
 
     fine_items_count: {
       code: "",
-      type: Types::Integer.constrained(included_in: 0..9999),
+      type: Types::Integer.constrained(included_in: 0..9999).optional,
       format: format_int_4_or_blank,
     },
 
@@ -228,7 +228,7 @@ module Sip2
 
     hold_items_count: {
       code: "",
-      type: Types::Integer.constrained(included_in: 0..9999),
+      type: Types::Integer.constrained(included_in: 0..9999).optional,
       format: format_int_4_or_blank,
     },
 
@@ -391,7 +391,7 @@ module Sip2
 
     overdue_items_count: {
       code: "",
-      type: Types::Integer.constrained(included_in: 0..9999),
+      type: Types::Integer.constrained(included_in: 0..9999).optional,
       format: format_int_4_or_blank,
     },
 
@@ -494,7 +494,7 @@ module Sip2
 
     recall_items_count: {
       code: "",
-      type: Types::Integer.constrained(included_in: 0..9999),
+      type: Types::Integer.constrained(included_in: 0..9999).optional,
       format: format_int_4_or_blank,
     },
 
@@ -651,7 +651,7 @@ module Sip2
 
     unavailable_holds_count: {
       code: "",
-      type: Types::Integer.constrained(included_in: 0..9999),
+      type: Types::Integer.constrained(included_in: 0..9999).optional,
       format: format_int_4_or_blank,
     },
 
