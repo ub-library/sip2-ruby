@@ -26,6 +26,10 @@ module Sip2
 
   format_string = ->(v) { v.to_s }
 
+  format_coded = ->(code, formatter) {
+    ->(v) { sprintf("%s%s|", code, formatter.call(v)) }
+  }
+
   # TODO: Proper roundtrip of one letter time zones?
   format_timestamp = ->(v) {
     tz = sprintf("%4s", v.utc? ? "Z" : String(v.zone))
@@ -298,12 +302,10 @@ module Sip2
       format: format_string,
     },
 
-    # TODO: Handle nested hash
-    items: {
-      type: Types::Hash.schema(
-        charged_items: Types::String.constrained(max_size: 255),
-      )
-    },
+    # The :items key is defined *after* later as it refers to other keys.
+    # the hash.
+    #
+    #items: {}
 
     language: {
       code: "",
@@ -419,11 +421,27 @@ module Sip2
       format: format_string,
     },
 
-    # TODO: Handle nested schema
     patron_status: {
       code: "",
-      type: Types::String.constrained(size: 14),
-      format: format_string,
+      type: Types::Hash.schema(
+        charge_privileges_denied: Types::Bool,
+        renewal_privileges_denied: Types::Bool,
+        recall_privileges_denied: Types::Bool,
+        hold_privileges_denied: Types::Bool,
+        card_reported_lost: Types::Bool,
+        too_many_items_charged: Types::Bool,
+        too_many_items_overdue: Types::Bool,
+        too_many_renewals: Types::Bool,
+        too_many_claims_of_items_returned: Types::Bool,
+        too_many_items_lost: Types::Bool,
+        excessive_outstanding_fines: Types::Bool,
+        excessive_outstanding_fees: Types::Bool,
+        recall_overdue: Types::Bool,
+        too_many_items_billed: Types::Bool,
+      ),
+      format: ->(v) {
+        v.map { |_,b| format_bool_with_space.call(b) }
+      },
     },
 
     payment_accepted: {
@@ -588,11 +606,19 @@ module Sip2
       format: format_bool,
     },
 
-    # TODO: Handled nested hash
     summary: {
       code: "",
-      type: Types::String.constrained(size: 10),
-      format: format_string,
+      type: Types::Hash.schema(
+        hold_items: Types::Bool,
+        overdue_items: Types::Bool,
+        charged_items: Types::Bool,
+        fine_items: Types::Bool,
+        recall_items: Types::Bool,
+        unavailable_holds: Types::Bool,
+      ),
+      format: ->(v) {
+        v.map { |_,b| format_bool_with_space.call(b) }.join + " "*4
+      },
     },
 
     supported_messages: {
@@ -686,5 +712,38 @@ module Sip2
     },
 
   }
+
+  items_subfields = %i[
+    hold_items
+    overdue_items
+    charged_items
+    fine_items
+    recall_items
+    unavailable_hold_items
+  ]
+
+  FIELDS[:items] = {
+    type: items_subfields
+      .map { |f|
+        Types::Hash.schema(f => Types::Array.of(FIELDS.fetch(f).fetch(:type)))
+      }
+      .reduce { |res,type| res | type },
+    format: ->(outer) {
+      outer.map { |subfield,ary|
+        subfield_info = FIELDS.fetch(subfield)
+        formatter = subfield_info.fetch(:format)
+        ary.map { |inner| formatter.call(inner) }.join
+      }.join
+    }
+  }
+
+  FIELDS.each do |k,v|
+    code = v.fetch(:code,"")
+    if code != ""
+      formatter = format_coded.call(code, v.fetch(:format))
+      FIELDS[k] = v.merge(format: formatter)
+    end
+  end
+
 
 end

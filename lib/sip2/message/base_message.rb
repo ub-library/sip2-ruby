@@ -37,20 +37,12 @@ module Sip2
 
       def format_field(field_name)
         field_info = Sip2::FIELDS.fetch(field_name)
-        code = field_info[:code]
         format = field_info.fetch(:format)
 
-        if code != ""
-          if self.attributes.key?(field_name)
-            sprintf("%<code>s%<value>s|",
-                    code: code,
-                    value: format.call(self[field_name])
-            )
-          else
-            ""
-          end
-        else
+        if self.attributes.key?(field_name)
           format.call(self[field_name])
+        else
+          ""
         end
       end
 
