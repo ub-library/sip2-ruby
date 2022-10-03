@@ -1,6 +1,6 @@
 require 'parslet'
 require 'sip2/field_parser_rules'
-require 'sip2/message_types'
+require 'sip2/messages'
 
 module Sip2
   module MessageParserRules
@@ -31,7 +31,7 @@ module Sip2
     }
 
     rule(:known_message_id) {
-      Sip2::MESSAGE_TYPES.keys.map { |s| str(s) }.inject { |res,a| res | a }
+      Sip2::MESSAGES_BY_CODE.keys.map { |s| str(s) }.inject { |res,a| res | a }
     }
 
     # A *command identifier* is defined as "two ASCII-characters". Theoretically

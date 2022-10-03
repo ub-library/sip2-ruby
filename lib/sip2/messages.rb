@@ -1,5 +1,5 @@
 module Sip2
-  MESSAGE_TYPES = {
+  MESSAGES_BY_CODE = {
 
     "01" => {
       name: "Block Patron",

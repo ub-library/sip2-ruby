@@ -1,7 +1,7 @@
 require 'parslet'
 require 'parslet/convenience'
 
-require 'sip2/message_types'
+require 'sip2/messages'
 module Sip2
 
   class Transformer < Parslet::Transform
@@ -47,7 +47,7 @@ module Sip2
     }
 
     rule(message_code: simple(:x)) {
-      message_type = MESSAGE_TYPES.fetch(x)
+      message_type = MESSAGES_BY_CODE.fetch(x)
       {
         message_code: x,
         message_name: message_type.fetch(:name),
