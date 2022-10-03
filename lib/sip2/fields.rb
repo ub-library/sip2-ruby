@@ -6,6 +6,10 @@ module Sip2
 
   format_bool = ->(v) { v ? "Y" : "N" }
 
+  format_bool_nillable = ->(v) { v.nil? ? 'U' : format_bool.(v) }
+
+  format_bool_with_space = ->(v) { v ? "Y" : " " }
+
   format_int_2 = ->(v) { sprintf('%02d', v) }
 
   format_int_3 = ->(v) { sprintf('%03d', v) }
@@ -14,13 +18,11 @@ module Sip2
 
   format_int_4_or_blank = ->(v) { v.nil? ? "    " : sprintf("%04d", v) }
 
-  format_nillable_bool = ->(v) { v.nil? ? 'U' : format_bool.(v) }
-
   format_int_4 = ->(v) { sprintf('%04d', v) }
 
   format_int_4_or_blank = ->(v) { v.nil? ? "    " : sprintf("%04d", v) }
 
-  format_nillable_bool = ->(v) { v.nil? ? 'U' : format_bool.(v) }
+  format_bool_nillable = ->(v) { v.nil? ? 'U' : format_bool.(v) }
 
   format_string = ->(v) { v.to_s }
 
@@ -137,7 +139,7 @@ module Sip2
     desensitize: {
       code: "",
       type: Types::Bool.optional,
-      format: format_nillable_bool,
+      format: format_bool_nillable,
     },
 
     due_date: {
@@ -336,7 +338,7 @@ module Sip2
     magnetic_media: {
       code: "",
       type: Types::Bool.optional,
-      format: format_nillable_bool,
+      format: format_bool_nillable,
     },
 
     max_print_width: {
