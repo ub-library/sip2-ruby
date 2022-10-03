@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-#
-# GENERATED FILE. DO NOT EDIT DIRECTLY.
 
 module Sip2
   MESSAGES = [

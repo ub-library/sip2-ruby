@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require_relative "../environment"
+
+require 'json'
+require "sip2/messages"
+
+puts JSON.dump(Sip2::MESSAGES)
