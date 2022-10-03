@@ -33,11 +33,11 @@ module Sip2
         institution_id
         item_identifier
         terminal_password
+      ],
+      optional_delimited_fields: %i[
         item_properties
         cancel
       ],
-      # TODO: Move any optional fields for Checkin here
-      optional_delimited_fields: [],
     },
     {
       code: "10",
@@ -54,6 +54,8 @@ module Sip2
         institution_id
         item_identifier
         permanent_location
+      ],
+      optional_delimited_fields: %i[
         title_identifier
         sort_bin
         patron_identifier
@@ -62,8 +64,6 @@ module Sip2
         screen_message
         print_line
       ],
-      # TODO: Move any optional fields for Checkin Response here
-      optional_delimited_fields: [],
     },
     {
       code: "11",
@@ -105,6 +105,8 @@ module Sip2
         item_identifier
         title_identifier
         due_date
+      ],
+      optional_delimited_fields: %i[
         fee_type
         security_inhibit
         currency_type
@@ -114,9 +116,7 @@ module Sip2
         transaction_id
         screen_message
         print_line
-      ],
-      # TODO: Move any optional fields for Checkout Response here
-      optional_delimited_fields: [],
+      ]
     },
     {
       code: "15",
@@ -174,10 +174,10 @@ module Sip2
       required_delimited_fields: %i[
         institution_id
         item_identifier
+      ],
+      optional_delimited_fields: %i[
         terminal_password
       ],
-      # TODO: Move any optional fields for Item Information here
-      optional_delimited_fields: [],
     },
     {
       code: "18",
@@ -190,12 +190,14 @@ module Sip2
         transaction_date
       ],
       required_delimited_fields: %i[
+        item_identifier
+        title_identifier
+      ],
+      optional_delimited_fields: %i[
         hold_queue_length
         due_date
         recall_date
         hold_pickup_date
-        item_identifier
-        title_identifier
         owner
         currency_type
         fee_amount
@@ -206,8 +208,6 @@ module Sip2
         screen_message
         print_line
       ],
-      # TODO: Move any optional fields for Item Information Response here
-      optional_delimited_fields: [],
     },
     {
       code: "19",
@@ -383,11 +383,11 @@ module Sip2
       required_delimited_fields: %i[
         institution_id
         patron_identifier
+      ],
+      optional_delimited_fields: %i[
         terminal_password
         patron_password
       ],
-      # TODO: Move any optional fields for End Patron Session here
-      optional_delimited_fields: [],
     },
     {
       code: "36",
@@ -400,11 +400,11 @@ module Sip2
       required_delimited_fields: %i[
         institution_id
         patron_identifier
+      ],
+      optional_delimited_fields: %i[
         screen_message
         print_line
       ],
-      # TODO: Move any optional fields for End Session Response here
-      optional_delimited_fields: [],
     },
     {
       code: "37",
@@ -458,13 +458,13 @@ module Sip2
       required_delimited_fields: %i[
         institution_id
         patron_identifier
+      ],
+      optional_delimited_fields: %i[
         terminal_password
         patron_password
         start_item
         end_item
-      ],
-      # TODO: Move any optional fields for Patron Information here
-      optional_delimited_fields: [],
+      ]
     },
     {
       code: "64",
@@ -485,6 +485,8 @@ module Sip2
         institution_id
         patron_identifier
         personal_name
+      ],
+      optional_delimited_fields: %i[
         hold_items_limit
         overdue_items_limit
         charged_items_limit
@@ -499,9 +501,7 @@ module Sip2
         home_phone_number
         screen_message
         print_line
-      ],
-      # TODO: Move any optional fields for Patron Information Response here
-      optional_delimited_fields: [],
+      ]
     },
     {
       code: "65",
@@ -600,14 +600,14 @@ module Sip2
       ],
       required_delimited_fields: %i[
         institution_id
-        library_name
         supported_messages
+      ],
+      optional_delimited_fields: %i[
+        library_name
         terminal_location
         screen_message
         print_line
       ],
-      # TODO: Move any optional fields for ACS Status here
-      optional_delimited_fields: [],
     },
     {
       code: "99",
