@@ -51,6 +51,11 @@ module Sip2
           attribute? field_name, field_info.fetch(:type) 
         end
 
+        unless [:request_asc_resend, :request_sc_resend].include?(symbol)
+          attribute? :sequence_number, Types::Integer.constrained(included_in: 0..9)
+        end
+        attribute? :checksum, Types::String.constrained(format: /^[0-9A-Fa-f]{4,4}$/)
+
       end
 
       BY_CODE[code] = struct

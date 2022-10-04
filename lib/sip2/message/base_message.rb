@@ -46,14 +46,46 @@ module Sip2
         end
       end
 
-      def to_sip2
-        sprintf("%<code>s%<ordered_fields>s%<delimited_fields>s\r",
-                code: self.class::CODE,
-                ordered_fields:
-                  ordered_fields.map { |f| format_field(f) }.join,
-                delimited_fields:
-                  delimited_fields.map { |f| format_field(f) }.join,
-               )
+      # TODO: Calculate the real checksum
+      def append_checksum(message)
+        unless self.class.instance_variable_get("@warned_about_checksum")
+          warn "*** CHECKSUM NOT IMPLEMENTED! Will reuse old checksums ..."
+          self.class.instance_variable_set("@warned_about_checksum", true)
+        end
+        field_info = Sip2::FIELDS.fetch(:checksum)
+        checksum = field_info.fetch(:format).call(self[:checksum])
+
+        sprintf("%s%s", message, checksum)
+      end
+
+      def append_error_detection(message)
+        if attributes.has_key?(:checksum)
+
+          if attributes.has_key?(:sequence_number)
+            field_info = Sip2::FIELDS.fetch(:sequence_number)
+            sequence_number = field_info.fetch(:format).call(self[:sequence_number])
+          else
+            sequence_number = ""
+          end
+
+          append_checksum(sprintf("%s%s", message, sequence_number))
+        else
+          message
+        end
+
+      end
+
+      def to_s
+        message = sprintf(
+          "%<code>s%<ordered_fields>s%<delimited_fields>s",
+          code: self.class::CODE,
+          ordered_fields:
+            ordered_fields.map { |f| format_field(f) }.join,
+          delimited_fields:
+            delimited_fields.map { |f| format_field(f) }.join,
+        )
+        message_with_error_detection = append_error_detection(message)
+        sprintf("%s\r", message_with_error_detection)
       end
 
 
