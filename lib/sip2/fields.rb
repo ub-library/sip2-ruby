@@ -623,8 +623,27 @@ module Sip2
 
     supported_messages: {
       code: "BX",
-      type: Types::String.constrained(max_size: 255),
-      format: format_string,
+      type: Types::Hash.schema(
+        patron_status_request: Types::Bool,
+        checkout: Types::Bool,
+        checkin: Types::Bool,
+        block_patron: Types::Bool,
+        sc_acs_status: Types::Bool,
+        request_sc_asc_resend: Types::Bool,
+        login: Types::Bool,
+        patron_information: Types::Bool,
+        end_patron_session: Types::Bool,
+        fee_paid: Types::Bool,
+        item_information: Types::Bool,
+        item_status_update: Types::Bool,
+        patron_enable: Types::Bool,
+        hold: Types::Bool,
+        renew: Types::Bool,
+        renew_all: Types::Bool,
+      ),
+      format: ->(v) {
+        v.map { |_,b| format_bool.call(b) }.join
+      },
     },
 
     terminal_location: {

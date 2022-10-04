@@ -406,7 +406,25 @@ module Sip2
     }
 
     rule(:supported_messages) {
-      str("BX") >> variable_length_value.as(:supported_messages) >> pipe
+      str("BX") >>
+      (
+        bool.as(:patron_status_request) >>
+        bool.as(:checkout) >>
+        bool.as(:checkin) >>
+        bool.as(:block_patron) >>
+        bool.as(:sc_acs_status) >>
+        bool.as(:request_sc_asc_resend) >>
+        bool.as(:login) >>
+        bool.as(:patron_information) >>
+        bool.as(:end_patron_session) >>
+        bool.as(:fee_paid) >>
+        bool.as(:item_information) >>
+        bool.as(:item_status_update) >>
+        bool.as(:patron_enable) >>
+        bool.as(:hold) >>
+        bool.as(:renew) >>
+        bool.as(:renew_all)
+      ).as(:supported_messages) >> pipe
     }
 
     rule(:terminal_location) {
