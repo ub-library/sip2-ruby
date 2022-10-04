@@ -15,6 +15,9 @@ transformer = Sip2::Transformer.new
 intermediate_tree = parser.parse(ARGF.read)
 tree = transformer.apply(intermediate_tree)
 
-tree.each do |message|
-  puts Sip2::Message.from_hash(message).to_sip2
+begin
+  tree.each do |message|
+    puts Sip2::Message.from_hash(message)
+  end
+rescue Errno::EPIPE => e
 end
