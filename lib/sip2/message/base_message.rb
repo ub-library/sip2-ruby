@@ -8,6 +8,9 @@ module Sip2
   module Message
     class BaseMessage < Dry::Struct
 
+      SEQUENCE_NUMBER_FORMAT = Sip2::FIELDS.fetch(:sequence_number).fetch(:format)
+      CHECKSUM_CODE = Sip2::FIELDS.fetch(:checksum).fetch(:code)
+
       schema schema.strict
 
       transform_keys(&:to_sym)
@@ -48,24 +51,34 @@ module Sip2
         end
       end
 
+      def checksum(msg)
+        # Add each character as an unsigned binary number
+        sum = msg.codepoints.sum
+
+        # Take the lower 16 bits of the total
+        sum16 = sum & 0xFFFF
+
+        # Perform a 2's complement
+        comp2 = (sum16 ^ 0xFFFF) + 1
+
+        # The checksum field is the result represented by four hex digits
+        sprintf("%04X", comp2)
+      end
+
       # TODO: Calculate the real checksum
       def append_checksum(message)
-        unless self.class.instance_variable_get("@warned_about_checksum")
-          warn "*** CHECKSUM NOT IMPLEMENTED! Will reuse old checksums ..."
-          self.class.instance_variable_set("@warned_about_checksum", true)
-        end
-        field_info = Sip2::FIELDS.fetch(:checksum)
-        checksum = field_info.fetch(:format).call(self[:checksum])
+        message_and_code = message + CHECKSUM_CODE
 
-        sprintf("%s%s", message, checksum)
+        checksum = checksum(message_and_code)
+
+        sprintf("%s%s", message_and_code, checksum)
       end
 
       def append_error_detection(message)
         if attributes.has_key?(:checksum)
 
           if attributes.has_key?(:sequence_number)
-            field_info = Sip2::FIELDS.fetch(:sequence_number)
-            sequence_number = field_info.fetch(:format).call(self[:sequence_number])
+            sequence_number = SEQUENCE_NUMBER_FORMAT.call(self[:sequence_number])
           else
             sequence_number = ""
           end
