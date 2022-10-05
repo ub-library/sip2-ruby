@@ -4,23 +4,13 @@ def checksum(msg)
   sum = msg.codepoints.sum
 
   # Take the lower 16 bits of the total
-  p sum16b = sprintf(B16, sum)[-16,16]
-  sum16i = sum16b.to_i(2)
+  sum16 = sprintf("%016b", sum)[-16,16].to_i(2)
 
   # Perform a 2's complement
-  #
-  # First we take a 1's complement
-  comp1_i = ~sum16i
-  # Ruby interprets this as a negative int, but we want the actual inverted bits
-  p comp1_16b = sprintf(B16, comp1_i).sub("..", "11")
-  comp1_16i = comp1_16b.to_i(2)
-  # Add 1 to make it a 2'a complement
-  comp2_16i = comp1_16i + 1
+  comp2 = (sum16 ^ 0xFFFF) + 1
 
-  p sprintf(B16, comp2_16i)
   # The checksum field is the result represented by four hex digits
-  p checksum = sprintf("%04X", comp2_16i)
-
+  sprintf("%04X", comp2)
 end
 
 def test(msgs)
