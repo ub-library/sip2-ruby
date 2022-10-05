@@ -10,6 +10,8 @@ module Sip2
 
       schema schema.strict
 
+      transform_keys(&:to_sym)
+
       class << self
 
         def ordered_fields

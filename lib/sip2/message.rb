@@ -13,7 +13,7 @@ module Sip2
     end
 
     def self.from_hash(data)
-      code = data.fetch(:message_code)
+      code = data.fetch(:message_code) { data.fetch("message_code") }
       klass = self[code]
       klass.new(data)
     end
@@ -43,12 +43,30 @@ module Sip2
 
         (ordered_fields + required_delimited_fields).each do |field_name|
           field_info = Sip2::FIELDS.fetch(field_name)
-          attribute field_name, field_info.fetch(:type) 
+          field_type = field_info.fetch(:type)
+          if field_type.is_a?(Hash)
+            attribute field_name do
+              field_type.each do |subfield_name,subfield_type|
+                attribute subfield_name, subfield_type
+              end
+            end
+          else
+            attribute field_name, field_type
+          end
         end
 
         optional_delimited_fields.each do |field_name|
           field_info = Sip2::FIELDS.fetch(field_name)
-          attribute? field_name, field_info.fetch(:type) 
+          field_type = field_info.fetch(:type)
+          if field_type.is_a?(Hash)
+            attribute? field_name do
+              field_type.each do |subfield_name,subfield_type|
+                attribute subfield_name, subfield_type
+              end
+            end
+          else
+            attribute? field_name, field_type
+          end
         end
 
         unless [:request_asc_resend, :request_sc_resend].include?(symbol)

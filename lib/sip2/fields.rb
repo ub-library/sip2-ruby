@@ -1,4 +1,5 @@
 require 'dry-types'
+require 'dry-struct'
 module Sip2
   module Types
     include Dry.Types()
@@ -140,7 +141,7 @@ module Sip2
 
     date_time_sync: {
       code: "",
-      type: Types::Time,
+      type: Types::JSON::Time,
       format: format_timestamp,
     },
 
@@ -176,7 +177,7 @@ module Sip2
 
     expiration_date: {
       code: "BW",
-      type: Types::Time,
+      type: Types::JSON::Time,
       format: format_timestamp,
     },
 
@@ -254,7 +255,7 @@ module Sip2
 
     hold_pickup_date: {
       code: "CM",
-      type: Types::Time,
+      type: Types::JSON::Time,
       format: format_timestamp,
     },
 
@@ -361,7 +362,7 @@ module Sip2
 
     nb_due_date: {
       code: "",
-      type: Types::Time.optional,
+      type: Types::JSON::Time.optional,
       format: format_timestamp_or_blanks,
     },
 
@@ -427,7 +428,7 @@ module Sip2
 
     patron_status: {
       code: "",
-      type: Types::Hash.schema(
+      type: {
         charge_privileges_denied: Types::Bool,
         renewal_privileges_denied: Types::Bool,
         recall_privileges_denied: Types::Bool,
@@ -442,9 +443,9 @@ module Sip2
         excessive_outstanding_fees: Types::Bool,
         recall_overdue: Types::Bool,
         too_many_items_billed: Types::Bool,
-      ),
+      },
       format: ->(v) {
-        v.map { |_,b| format_bool_with_space.call(b) }
+        v.attributes.map { |_,b| format_bool_with_space.call(b) }
       },
     },
 
@@ -504,7 +505,7 @@ module Sip2
 
     recall_date: {
       code: "CJ",
-      type: Types::Time,
+      type: Types::JSON::Time,
       format: format_timestamp,
     },
 
@@ -552,7 +553,7 @@ module Sip2
 
     return_date: {
       code: "",
-      type: Types::Time,
+      type: Types::JSON::Time,
       format: format_timestamp,
     },
 
@@ -612,22 +613,22 @@ module Sip2
 
     summary: {
       code: "",
-      type: Types::Hash.schema(
+      type: {
         hold_items: Types::Bool,
         overdue_items: Types::Bool,
         charged_items: Types::Bool,
         fine_items: Types::Bool,
         recall_items: Types::Bool,
         unavailable_holds: Types::Bool,
-      ),
+      },
       format: ->(v) {
-        v.map { |_,b| format_bool_with_space.call(b) }.join + " "*4
+        v.attributes.map { |_,b| format_bool_with_space.call(b) }.join + " "*4
       },
     },
 
     supported_messages: {
       code: "BX",
-      type: Types::Hash.schema(
+      type: {
         patron_status_request: Types::Bool,
         checkout: Types::Bool,
         checkin: Types::Bool,
@@ -644,9 +645,9 @@ module Sip2
         hold: Types::Bool,
         renew: Types::Bool,
         renew_all: Types::Bool,
-      ),
+      },
       format: ->(v) {
-        v.map { |_,b| format_bool.call(b) }.join
+        v.attributes.map { |_,b| format_bool.call(b) }.join
       },
     },
 
@@ -682,7 +683,7 @@ module Sip2
 
     transaction_date: {
       code: "",
-      type: Types::Time,
+      type: Types::JSON::Time,
       format: format_timestamp,
     },
 
@@ -748,11 +749,14 @@ module Sip2
   FIELDS[:items] = {
     type: items_subfields
       .map { |f|
-        Types::Hash.schema(f => Types::Array.of(FIELDS.fetch(f).fetch(:type)))
+        Class.new(Dry::Struct) do
+          transform_keys(&:to_sym)
+          attribute f, Types::Array.of(FIELDS.fetch(f).fetch(:type))
+        end
       }
       .reduce { |res,type| res | type },
     format: ->(outer) {
-      outer.map { |subfield,ary|
+      outer.attributes.map { |subfield,ary|
         subfield_info = FIELDS.fetch(subfield)
         formatter = subfield_info.fetch(:format)
         ary.map { |inner| formatter.call(inner) }.join

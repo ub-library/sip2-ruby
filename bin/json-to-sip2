@@ -1,0 +1,68 @@
+#!/usr/bin/env ruby
+
+require_relative '../environment'
+
+require 'yajl'
+require 'optparse'
+require 'sip2/message'
+
+options = {
+  continue_on_error: false,
+  debug: false,
+  line_by_line: true,
+}
+OptionParser.new do |opts|
+  opts.banner = "Usage: #{$0} [options]"
+  opts.separator ""
+  opts.separator "Options:"
+
+  opts.on("-a", "--array", "Read messages from a JSON array.") do
+    options[:line_by_line] = false
+  end
+
+  opts.on("-c", "--continue-on-error",
+          "When parsing an object fails, continue with the next.",
+          "The exit code will still be non-zero.",
+          'This option does not apply when using `--array`.'
+         ) do
+    options[:continue_on_error] = true
+  end
+
+  opts.on("-h", "--help", "Display this message.") do
+    puts opts
+    exit
+  end
+
+end.parse!
+
+UnknownError = Class.new(StandardError)
+
+if options[:line_by_line]
+  error_count = 0
+  Yajl.load($stdin) do |obj|
+    begin 
+      puts Sip2::Message.from_hash(obj)
+    rescue Dry::Struct::Error => error
+      warn "Invalid object: #{Yajl.dump(obj)}"
+      if options[:continue_on_error]
+        warn error.message
+        error_count += 1
+      else
+        raise error
+      end
+    end
+  end
+  if error_count > 0
+    warn sprintf(
+      "WARNING: %d object%s could not be parsed",
+      error_count,
+      error_count == 1 ? "" : "s"
+    )
+    exit 1
+  end
+else
+  data = Yajl.load($stdin)
+  data.each do |obj|
+    puts Sip2::Message.from_hash(obj)
+  end
+end
