@@ -30,6 +30,10 @@ module Sip2
     ->(v) { sprintf("%s%s|", code, formatter.call(v)) }
   }
 
+  format_error_correction = ->(code, formatter) {
+    ->(v) { sprintf("%s%s", code, formatter.call(v)) }
+  }
+
   # TODO: Proper roundtrip of one letter time zones?
   format_timestamp = ->(v) {
     tz = sprintf("%4s", v.utc? ? "Z" : String(v.zone))
@@ -758,7 +762,10 @@ module Sip2
 
   FIELDS.each do |k,v|
     code = v.fetch(:code,"")
-    if code != ""
+    if [:sequence_number, :checksum].include?(k)
+      formatter = format_error_correction.call(code, v.fetch(:format))
+      FIELDS[k] = v.merge(format: formatter)
+    elsif code != ""
       formatter = format_coded.call(code, v.fetch(:format))
       FIELDS[k] = v.merge(format: formatter)
     end
