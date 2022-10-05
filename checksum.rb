@@ -3,7 +3,7 @@ def checksum(msg)
   sum = msg.codepoints.sum
 
   # Take the lower 16 bits of the total
-  sum16 = sprintf("%04x", sum)[-4,4].to_i(16)
+  sum16 = sum & 0xFFFF
 
   # Perform a 2's complement
   comp2 = (sum16 ^ 0xFFFF) + 1
