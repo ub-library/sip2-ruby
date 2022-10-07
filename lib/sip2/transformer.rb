@@ -56,7 +56,18 @@ module Sip2
     }
 
     rule(merge_repeat: subtree(:x)) {
-      x.each_with_object({}) { |el, hsh| hsh.merge!(el) }
+      x.each_with_object({}) { |el, hsh|
+        if el.key?(:merge_repeat_to_array)
+          real = el.fetch(:merge_repeat_to_array)
+          real.map { |k,v|
+            ary = hsh.fetch(k) { [] }
+            ary << v
+            hsh[k] = ary
+          }
+        else
+          hsh.merge!(el)
+        end
+      }
     }
 
     %i[hold_items overdue_items charged_items fine_items recall_items unavailable_hold_items].each do |sym|

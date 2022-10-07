@@ -306,7 +306,7 @@ module Sip2
     }
 
     rule(:print_line) {
-      str("AG") >> variable_length_value.as(:print_line) >> pipe
+      str("AG") >> variable_length_value.as(:print_line).as(:merge_repeat_to_array) >> pipe
     }
 
     rule(:protocol_version) {
@@ -362,7 +362,7 @@ module Sip2
     }
 
     rule(:screen_message) {
-      str("AF") >> variable_length_value.as(:screen_message) >> pipe
+      str("AF") >> variable_length_value.as(:screen_message).as(:merge_repeat_to_array) >> pipe
     }
 
     rule(:security_inhibit) {

@@ -31,6 +31,12 @@ module Sip2
     ->(v) { sprintf("%s%s|", code, formatter.call(v)) }
   }
 
+  format_coded_array = ->(code, formatter) {
+    ->(v) {
+      v.map { |el| format_coded.call(code, formatter).call(el) }
+    }
+  }
+
   format_error_correction = ->(code, formatter) {
     ->(v) { sprintf("%s%s", code, formatter.call(v)) }
   }
@@ -481,7 +487,7 @@ module Sip2
 
     print_line: {
       code: "AG",
-      type: Types::String.constrained(max_size: 255),
+      type: Types::Array.of(Types::String.constrained(max_size: 255)),
       format: format_string,
     },
 
@@ -565,7 +571,7 @@ module Sip2
 
     screen_message: {
       code: "AF",
-      type: Types::String.constrained(max_size: 255),
+      type: Types::Array.of(Types::String.constrained(max_size: 255)),
       format: format_string,
     },
 
@@ -769,6 +775,8 @@ module Sip2
     if [:sequence_number, :checksum].include?(k)
       formatter = format_error_correction.call(code, v.fetch(:format))
       FIELDS[k] = v.merge(format: formatter)
+    elsif [:print_line, :screen_message].include?(k)
+      FIELDS[k][:format] = format_coded_array.call(code, v.fetch(:format))
     elsif code != ""
       formatter = format_coded.call(code, v.fetch(:format))
       FIELDS[k] = v.merge(format: formatter)
