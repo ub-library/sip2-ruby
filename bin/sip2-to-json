@@ -49,27 +49,30 @@ parse = ->(data) {
 }
 
 if options[:line_by_line]
-  error_count = 0
-  ARGF.each_line.with_index(1) do |data,i|
-    begin 
-      puts parse.call(data).first.to_json
-    rescue Parslet::ParseFailed => error
-      warn "Error parsing line #{i}: #{data.dump}"
-      warn error.parse_failure_cause.ascii_tree if options[:debug]
-      if options[:continue_on_error]
-        error_count += 1
-      else
-        raise error
+  begin
+    error_count = 0
+    ARGF.each_line.with_index(1) do |data,i|
+      begin
+        puts parse.call(data).first.to_json
+      rescue Parslet::ParseFailed => error
+        warn "Error parsing line #{i}: #{data.dump}"
+        warn error.parse_failure_cause.ascii_tree if options[:debug]
+        if options[:continue_on_error]
+          error_count += 1
+        else
+          raise error
+        end
       end
     end
-  end
-  if error_count > 0
-    warn sprintf(
-      "WARNING: %d line%s could not be parsed",
-      error_count,
-      error_count == 1 ? "" : "s"
-    )
-    exit 1
+    if error_count > 0
+      warn sprintf(
+        "WARNING: %d line%s could not be parsed",
+        error_count,
+        error_count == 1 ? "" : "s"
+      )
+      exit 1
+    end
+  rescue Errno::EPIPE => e
   end
 else
   begin
