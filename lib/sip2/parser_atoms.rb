@@ -22,7 +22,7 @@ module Sip2
     rule(:year) { digit.repeat(4,4) }
     rule(:month) { (zero >> natural) | (str("1") >> match["012"] ) }
     rule(:day) { (zero >> natural) | (match["12"] >> digit) | (str("3") >> match["01"]) }
-    rule(:zzzz) { (space | upper).repeat(4) }
+    rule(:zzzz) { (space | upper).repeat(4,4) }
     rule(:hour) { (match["01"] >> digit) | str("2") >> match["0-3"] }
     rule(:minute) { match["0-5"] >> digit }
     rule(:second) { minute }
@@ -45,7 +45,7 @@ module Sip2
     }
 
     rule(:variable_length_value) {
-      (pipe.absent? >> any).repeat(0,255).as(:str)
+      (pipe.absent? >> any).repeat(0,255).as(:str) >> pipe
     }
 
   end

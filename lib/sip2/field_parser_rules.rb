@@ -20,7 +20,7 @@ module Sip2
     }
 
     rule(:blocked_card_msg) {
-      str("AL") >> variable_length_value.as(:blocked_card_msg) >> pipe
+      str("AL") >> variable_length_value.as(:blocked_card_msg) 
     }
 
     rule(:cancel) {
@@ -32,7 +32,7 @@ module Sip2
     }
 
     rule(:charged_items) {
-      str("AU") >> variable_length_value.as(:charged_items) >> pipe
+      str("AU") >> variable_length_value.as(:charged_items) 
     }
 
     rule(:charged_items_count) {
@@ -64,7 +64,7 @@ module Sip2
     }
 
     rule(:current_location) {
-      str("AP") >> variable_length_value.as(:current_location) >> pipe
+      str("AP") >> variable_length_value.as(:current_location) 
     }
 
     rule(:date_time_sync) {
@@ -76,15 +76,15 @@ module Sip2
     }
 
     rule(:due_date) {
-      str("AH") >> variable_length_value.as(:due_date) >> pipe
+      str("AH") >> variable_length_value.as(:due_date) 
     }
 
     rule(:email_address) {
-      str("BE") >> variable_length_value.as(:email_address) >> pipe
+      str("BE") >> variable_length_value.as(:email_address) 
     }
 
     rule(:end_item) {
-      str("BQ") >> variable_length_value.as(:end_item) >> pipe
+      str("BQ") >> variable_length_value.as(:end_item) 
     }
 
     rule(:end_session) {
@@ -100,15 +100,15 @@ module Sip2
     }
 
     rule(:fee_amount) {
-      str("BV") >> variable_length_value.as(:fee_amount) >> pipe
+      str("BV") >> variable_length_value.as(:fee_amount) 
     }
 
     rule(:fee_identifier) {
-      str("CG") >> variable_length_value.as(:fee_identifier) >> pipe
+      str("CG") >> variable_length_value.as(:fee_identifier) 
     }
 
     rule(:fee_limit) {
-      str("CC") >> variable_length_value.as(:fee_limit) >> pipe
+      str("CC") >> variable_length_value.as(:fee_limit) 
     }
 
     rule(:fee_type) {
@@ -120,7 +120,7 @@ module Sip2
     }
 
     rule(:fine_items) {
-      str("AV") >> variable_length_value.as(:fine_items) >> pipe
+      str("AV") >> variable_length_value.as(:fine_items) 
     }
 
     rule(:fine_items_count) {
@@ -128,7 +128,7 @@ module Sip2
     }
 
     rule(:hold_items) {
-      str("AS") >> variable_length_value.as(:hold_items) >> pipe
+      str("AS") >> variable_length_value.as(:hold_items) 
     }
 
     rule(:hold_items_count) {
@@ -148,7 +148,7 @@ module Sip2
     }
 
     rule(:hold_queue_length) {
-      str("CF") >> variable_length_value.as(:hold_queue_length) >> pipe
+      str("CF") >> variable_length_value.as(:hold_queue_length) 
     }
 
     rule(:hold_type) {
@@ -156,23 +156,23 @@ module Sip2
     }
 
     rule(:home_address) {
-      str("BD") >> variable_length_value.as(:home_address) >> pipe
+      str("BD") >> variable_length_value.as(:home_address) 
     }
 
     rule(:home_phone_number) {
-      str("BF") >> variable_length_value.as(:home_phone_number) >> pipe
+      str("BF") >> variable_length_value.as(:home_phone_number) 
     }
 
     rule(:institution_id) {
-      str("AO") >> variable_length_value.as(:institution_id) >> pipe
+      str("AO") >> variable_length_value.as(:institution_id) 
     }
 
     rule(:item_identifier) {
-      str("AB") >> variable_length_value.as(:item_identifier) >> pipe
+      str("AB") >> variable_length_value.as(:item_identifier) 
     }
 
     rule(:item_properties) {
-      str("CH") >> variable_length_value.as(:item_properties) >> pipe
+      str("CH") >> variable_length_value.as(:item_properties) 
     }
 
     rule(:item_properties_ok) {
@@ -195,19 +195,19 @@ module Sip2
     }
 
     rule(:library_name) {
-      str("AM") >> variable_length_value.as(:library_name) >> pipe
+      str("AM") >> variable_length_value.as(:library_name) 
     }
 
     rule(:location_code) {
-      str("CP") >> variable_length_value.as(:location_code) >> pipe
+      str("CP") >> variable_length_value.as(:location_code) 
     }
 
     rule(:login_password) {
-      str("CO") >> variable_length_value.as(:login_password) >> pipe
+      str("CO") >> variable_length_value.as(:login_password) 
     }
 
     rule(:login_user_id) {
-      str("CN") >> variable_length_value.as(:login_user_id) >> pipe
+      str("CN") >> variable_length_value.as(:login_user_id) 
     }
 
     rule(:magnetic_media) {
@@ -243,7 +243,7 @@ module Sip2
     }
 
     rule(:overdue_items) {
-      str("AT") >> variable_length_value.as(:overdue_items) >> pipe
+      str("AT") >> variable_length_value.as(:overdue_items) 
     }
 
     rule(:overdue_items_count) {
@@ -255,15 +255,15 @@ module Sip2
     }
 
     rule(:owner) {
-      str("BG") >> variable_length_value.as(:owner) >> pipe
+      str("BG") >> variable_length_value.as(:owner) 
     }
 
     rule(:patron_identifier) {
-      str("AA") >> variable_length_value.as(:patron_identifier) >> pipe
+      str("AA") >> variable_length_value.as(:patron_identifier) 
     }
 
     rule(:patron_password) {
-      str("AD") >> variable_length_value.as(:patron_password) >> pipe
+      str("AD") >> variable_length_value.as(:patron_password) 
     }
 
     rule(:patron_status) {
@@ -294,19 +294,19 @@ module Sip2
     }
 
     rule(:permanent_location) {
-      str("AQ") >> variable_length_value.as(:permanent_location) >> pipe
+      str("AQ") >> variable_length_value.as(:permanent_location) 
     }
 
     rule(:personal_name) {
-      str("AE") >> variable_length_value.as(:personal_name) >> pipe
+      str("AE") >> variable_length_value.as(:personal_name) 
     }
 
     rule(:pickup_location) {
-      str("BS") >> variable_length_value.as(:pickup_location) >> pipe
+      str("BS") >> variable_length_value.as(:pickup_location) 
     }
 
     rule(:print_line) {
-      str("AG") >> variable_length_value.as(:print_line).as(:merge_repeat_to_array) >> pipe
+      str("AG") >> variable_length_value.as(:print_line).as(:merge_repeat_to_array) 
     }
 
     rule(:protocol_version) {
@@ -326,7 +326,7 @@ module Sip2
     }
 
     rule(:recall_items) {
-      str("BU") >> variable_length_value.as(:recall_items) >> pipe
+      str("BU") >> variable_length_value.as(:recall_items) 
     }
 
     rule(:recall_items_count) {
@@ -342,7 +342,7 @@ module Sip2
     }
 
     rule(:renewed_items) {
-      str("BM") >> variable_length_value.as(:renewed_items) >> pipe
+      str("BM") >> variable_length_value.as(:renewed_items) 
     }
 
     rule(:resensitize) {
@@ -362,7 +362,7 @@ module Sip2
     }
 
     rule(:screen_message) {
-      str("AF") >> variable_length_value.as(:screen_message).as(:merge_repeat_to_array) >> pipe
+      str("AF") >> variable_length_value.as(:screen_message).as(:merge_repeat_to_array) 
     }
 
     rule(:security_inhibit) {
@@ -378,11 +378,11 @@ module Sip2
     }
 
     rule(:sort_bin) {
-      str("CL") >> variable_length_value.as(:sort_bin) >> pipe
+      str("CL") >> variable_length_value.as(:sort_bin) 
     }
 
     rule(:start_item) {
-      str("BP") >> variable_length_value.as(:start_item) >> pipe
+      str("BP") >> variable_length_value.as(:start_item) 
     }
 
     rule(:status_code) {
@@ -428,11 +428,11 @@ module Sip2
     }
 
     rule(:terminal_location) {
-      str("AN") >> variable_length_value.as(:terminal_location) >> pipe
+      str("AN") >> variable_length_value.as(:terminal_location) 
     }
 
     rule(:terminal_password) {
-      str("AC") >> variable_length_value.as(:terminal_password) >> pipe
+      str("AC") >> variable_length_value.as(:terminal_password) 
     }
 
     rule(:third_party_allowed) {
@@ -444,7 +444,7 @@ module Sip2
     }
 
     rule(:title_identifier) {
-      str("AJ") >> variable_length_value.as(:title_identifier) >> pipe
+      str("AJ") >> variable_length_value.as(:title_identifier) 
     }
 
     rule(:transaction_date) {
@@ -452,7 +452,7 @@ module Sip2
     }
 
     rule(:transaction_id) {
-      str("BK") >> variable_length_value.as(:transaction_id) >> pipe
+      str("BK") >> variable_length_value.as(:transaction_id) 
     }
 
     rule(:uid_algorithm) {
@@ -464,7 +464,7 @@ module Sip2
     }
 
     rule(:unavailable_hold_items) {
-      str("CD") >> variable_length_value.as(:unavailable_hold_items) >> pipe
+      str("CD") >> variable_length_value.as(:unavailable_hold_items) 
     }
 
     rule(:unrenewed_count) {
@@ -472,7 +472,7 @@ module Sip2
     }
 
     rule(:unrenewed_items) {
-      str("BN") >> variable_length_value.as(:unrenewed_items) >> pipe
+      str("BN") >> variable_length_value.as(:unrenewed_items) 
     }
 
     rule(:valid_patron) {

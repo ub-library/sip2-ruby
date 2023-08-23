@@ -11,3 +11,8 @@ gem "yajl-ruby"
 group :development do
   gem "pry"
 end
+
+group :development, :test do
+  gem "minitest"
+  gem "minitest-reporters"
+end
