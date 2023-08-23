@@ -4,8 +4,7 @@ require_relative '../environment'
 
 require 'json'
 require 'optparse'
-require 'sip2/parser'
-require 'sip2/transformer'
+require 'sip2'
 
 options = {
   continue_on_error: false,
@@ -40,20 +39,12 @@ OptionParser.new do |opts|
 
 end.parse!
 
-parser = Sip2::Parser.new
-transformer = Sip2::Transformer.new
-
-parse = ->(data) {
-  intermediate_tree = parser.parse(data)
-  transformer.apply(intermediate_tree)
-}
-
 if options[:line_by_line]
   begin
     error_count = 0
     ARGF.each_line.with_index(1) do |data,i|
       begin
-        puts parse.call(data).first.to_json
+        puts Sip2.parse(data).first.to_json
       rescue Parslet::ParseFailed => error
         warn "Error parsing line #{i}: #{data.dump}"
         warn error.parse_failure_cause.ascii_tree if options[:debug]
@@ -76,7 +67,7 @@ if options[:line_by_line]
   end
 else
   begin
-    puts parse.call(ARGF.read).to_json
+    puts Sip2.parse(ARGF.read).to_json
   rescue Parslet::ParseFailed => error
     warn error.parse_failure_cause.ascii_tree if options[:debug]
     raise error
