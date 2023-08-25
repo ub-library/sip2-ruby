@@ -7,23 +7,26 @@ require 'sip2'
 
 describe Sip2 do
 
-
   describe "::parse" do
     describe "Known messages" do
       KNOWN_MESSAGES_FIXTURE_CODES.each do |code|
 
-        msg = sip2_fixture(code)
+        describe code do
 
-        it "accepts message #{code}" do
-          assert_kind_of Array, Sip2.parse(msg)
-        end
+          msg = sip2_fixture(code)
 
-        it "parses the message code #{code} into the message_code key" do
-          assert_equal code, Sip2.parse(msg).first[:message_code]
-        end
+          it "accepts the message" do
+            assert_kind_of Array, Sip2.parse(msg)
+            assert_kind_of Hash, Sip2.parse(msg).first
+          end
 
-        it "gives a name to the #{code} message" do
-          assert_kind_of String, Sip2.parse(msg).first[:message_name]
+          it "sets :message_code to the message code" do
+            assert_equal code, Sip2.parse(msg).first[:message_code]
+          end
+
+          it "set :message_name" do
+            assert_kind_of String, Sip2.parse(msg).first[:message_name]
+          end
         end
       end
     end
@@ -37,6 +40,7 @@ describe Sip2 do
 
           it "accepts the message" do
             assert_kind_of Array, Sip2.parse(msg)
+            assert_kind_of Hash, Sip2.parse(msg).first
           end
 
           it "sets :message_code to the message code" do
