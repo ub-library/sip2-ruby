@@ -1,9 +1,7 @@
 require 'dry-struct'
+require 'sip2/types'
 require 'sip2/fields'
 module Sip2
-  module Types
-    include Dry.Types()
-  end
 
   module Message
     class BaseMessage < Dry::Struct
