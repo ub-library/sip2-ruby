@@ -39,6 +39,18 @@ describe Sip2 do
             assert_kind_of Array, Sip2.parse(msg)
           end
 
+          it "sets :message_code to the message code" do
+            assert_equal code, Sip2.parse(msg).first[:message_code]
+          end
+
+          it "sets :message_name to 'Unknown Message'" do
+            assert_equal "Unknown Message", Sip2.parse(msg).first[:message_name]
+          end
+
+          it "sets :message_data to what's between the code and the terminator" do
+            expected = msg.sub(/^#{Regexp.escape(code)}/, "").chomp
+            assert_equal(expected, Sip2.parse(msg).first[:message_data])
+          end
         end
       end
     end

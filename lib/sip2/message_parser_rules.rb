@@ -44,7 +44,7 @@ module Sip2
     # simplicity we reduce the accepted character range to digits and letters.
     #
     rule(:unknown_message_id) {
-      known_message_id.absent? >> match["0-9A-Za-z"].repeat(2,2)
+      known_message_id.absent? >> match["0-9A-Za-z"].repeat(2,2).as(:str)
     }
 
     MESSAGES.each do |msg|
@@ -85,9 +85,14 @@ module Sip2
       }
     end
 
+    rule(:unknown_message_data) {
+      (eom.absent? >> any).repeat.as(:str) >> eom
+    }
+
     # Messages with unknown ID:s should be accepted and ignored
     rule(:unknown_message) {
-      (unknown_message_id >> (eom.absent? >> any).repeat).as(:str).as(:unknown_message) >> eom
+      unknown_message_id.as(:message_code) >>
+      unknown_message_data.as(:message_data)
     }
 
     rule(:known_message) {

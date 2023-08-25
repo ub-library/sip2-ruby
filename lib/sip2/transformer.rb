@@ -46,6 +46,14 @@ module Sip2
       Time.new(year, month, day, hour, minute, second, zone)
     }
 
+    rule(message_code: simple(:c), message_data: simple(:d)) {
+      {
+        message_code: c,
+        message_name: "Unknown Message",
+        message_data: d,
+      }
+    }
+
     rule(message_code: simple(:x)) {
       message_type = MESSAGES_BY_CODE.fetch(x)
       {

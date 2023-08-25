@@ -1,6 +1,7 @@
 require 'sip2/fields'
 require 'sip2/messages'
 require 'sip2/message/base_message'
+require 'sip2/message/unknown_message'
 
 module Sip2
   module Message
@@ -14,7 +15,7 @@ module Sip2
 
     def self.from_hash(data)
       code = data.fetch(:message_code) { data.fetch("message_code") }
-      klass = self[code]
+      klass = self[code] || UnknownMessage
       klass.new(data)
     end
 
