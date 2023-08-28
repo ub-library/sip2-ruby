@@ -63,29 +63,25 @@ module Sip2
         sprintf("%04X", comp2)
       end
 
-      # TODO: Calculate the real checksum
-      def append_checksum(message)
-        message_and_code = message + CHECKSUM_CODE
-
-        checksum = checksum(message_and_code)
-
-        sprintf("%s%s", message_and_code, checksum)
+      def checksum_field(message)
+        CHECKSUM_CODE + checksum(message + CHECKSUM_CODE)
       end
 
-      def append_error_detection(message)
-        if attributes.has_key?(:checksum)
-
-          if attributes.has_key?(:sequence_number)
-            sequence_number = SEQUENCE_NUMBER_FORMAT.call(self[:sequence_number])
-          else
-            sequence_number = ""
-          end
-
-          append_checksum(sprintf("%s%s", message, sequence_number))
+      def sequence_number_field
+        if attributes.has_key?(:sequence_number)
+          SEQUENCE_NUMBER_FORMAT.call(self[:sequence_number])
         else
-          message
+          ""
         end
+      end
 
+      def error_detection_fields(message)
+        if attributes.has_key?(:checksum)
+          sequence_number = sequence_number_field
+          sequence_number + checksum_field(message + sequence_number)
+        else
+          ""
+        end
       end
 
       def to_s
@@ -97,11 +93,9 @@ module Sip2
           delimited_fields:
             delimited_fields.map { |f| format_field(f) }.join,
         )
-        message_with_error_detection = append_error_detection(message)
-        sprintf("%s\r", message_with_error_detection)
+        error_detection = error_detection_fields(message)
+        sprintf("%s%s\r", message, error_detection)
       end
-
-
     end
   end
 end
