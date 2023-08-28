@@ -63,7 +63,8 @@ if options[:line_by_line]
       )
       exit 1
     end
-  rescue Errno::EPIPE => e
+  rescue Errno::EPIPE
+    exit 0
   end
 else
   begin
