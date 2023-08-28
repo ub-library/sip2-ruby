@@ -13,6 +13,10 @@ module Sip2
       attribute :message_name, Types::String.default("Unknown Message".freeze)
       attribute :message_data, Types::String
 
+      def encode
+        to_s
+      end
+
       def to_s
         sprintf("%s%s\r", message_code, message_data)
       end

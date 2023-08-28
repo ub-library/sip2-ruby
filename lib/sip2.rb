@@ -10,8 +10,8 @@ module Sip2
     TRANSFORMER.apply(PARSER.parse(data))
   end
 
-  def self.encode(hsh)
-    Sip2::Message.from_hash(hsh).to_s
+  def self.encode(hsh, **encoding_options)
+    Sip2::Message.from_hash(hsh).encode(**encoding_options)
   end
 
 end

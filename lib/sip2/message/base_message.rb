@@ -63,8 +63,14 @@ module Sip2
         sprintf("%04X", comp2)
       end
 
-      def checksum_field(message)
-        CHECKSUM_CODE + checksum(message + CHECKSUM_CODE)
+      def checksum_field(message, checksum_encoder: nil)
+        msg =
+          if checksum_encoder
+            checksum_encoder.call(message)
+          else
+            message
+          end
+        CHECKSUM_CODE + checksum(msg + CHECKSUM_CODE)
       end
 
       def sequence_number_field
@@ -75,16 +81,16 @@ module Sip2
         end
       end
 
-      def error_detection_fields(message)
+      def error_detection_fields(message, **checksum_options)
         if attributes.has_key?(:checksum)
           sequence_number = sequence_number_field
-          sequence_number + checksum_field(message + sequence_number)
+          sequence_number + checksum_field(message + sequence_number, **checksum_options)
         else
           ""
         end
       end
 
-      def to_s
+      def encode(add_error_detection: true, checksum_encoder: nil)
         message = sprintf(
           "%<code>s%<ordered_fields>s%<delimited_fields>s",
           code: self.class::CODE,
@@ -93,8 +99,17 @@ module Sip2
           delimited_fields:
             delimited_fields.map { |f| format_field(f) }.join,
         )
-        error_detection = error_detection_fields(message)
+        error_detection =
+          if add_error_detection 
+            error_detection_fields(message, checksum_encoder: checksum_encoder)
+          else
+            ""
+          end
         sprintf("%s%s\r", message, error_detection)
+      end
+
+      def to_s
+        encode
       end
     end
   end
