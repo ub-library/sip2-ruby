@@ -10,13 +10,12 @@ module Sip2
 
     rule(:eom) { str("\r") }
     rule(:nullc) { str("\0") }
-    rule(:delim) { str("|") }
-    rule(:any_valid) { eom.absent? >> nullc.absent? >> delim.absent? >> any }
+    rule(:pipe) { str("|") }
+    rule(:any_valid) { eom.absent? >> nullc.absent? >> pipe.absent? >> any }
 
     rule(:hex_digit) { match["0-9A-F"] }
 
     rule(:space) { str(" ") }
-    rule(:pipe) { str("|") }
     rule(:upper) { match["A-Z"] }
 
     rule(:year) { digit.repeat(4,4) }
