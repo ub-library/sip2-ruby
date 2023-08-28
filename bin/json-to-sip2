@@ -5,10 +5,13 @@ require_relative '../environment'
 require 'yajl'
 require 'optparse'
 require 'sip2'
+require 'sip2/checksum_encoder'
 
 options = {
+  checksum_encoder: nil,
   continue_on_error: false,
   debug: false,
+  error_detection: false,
   line_by_line: true,
 }
 OptionParser.new do |opts|
@@ -28,6 +31,19 @@ OptionParser.new do |opts|
     options[:continue_on_error] = true
   end
 
+  opts.on("-C", "--checksum-encoder=<NAME>",
+          "Reencode the message with Sip2::ChecksumEncoder::<NAME>",
+          "before calculating the checksum, where <NAME> is one of:",
+          *Sip2::ChecksumEncoder.constants.map { |c| sprintf("    %s", c) }
+         ) do |name|
+           options[:checksum_encoder] = name
+  end
+
+  opts.on("-E", "--error-detection",
+          "Append error detection fields to the message",
+         ) do |name|
+           options[:error_detection] = true
+  end
   opts.on("-h", "--help", "Display this message.") do
     puts opts
     exit
@@ -37,11 +53,22 @@ end.parse!
 
 UnknownError = Class.new(StandardError)
 
+checksum_encoder_name = options[:checksum_encoder] || ENV['SIP2_CHECKSUM_ENCODER']
+checksum_encoder = Sip2::ChecksumEncoder[checksum_encoder_name] if checksum_encoder_name
+
+encode = ->(obj) {
+  Sip2.encode(
+    obj,
+    add_error_detection: options[:error_detection],
+    checksum_encoder: checksum_encoder
+  )
+}
+
 if options[:line_by_line]
   error_count = 0
   Yajl.load($stdin) do |obj|
     begin 
-      puts Sip2.encode(obj)
+      puts encode.call(obj)
     rescue Dry::Struct::Error => error
       warn "Invalid object: #{Yajl.dump(obj)}"
       if options[:continue_on_error]
@@ -63,6 +90,6 @@ if options[:line_by_line]
 else
   data = Yajl.load($stdin)
   data.each do |obj|
-    puts Sip2.encode(obj)
+    puts encode.call(obj)
   end
 end
