@@ -4,7 +4,7 @@ require_relative '../environment'
 
 require 'yajl'
 require 'optparse'
-require 'sip2/message'
+require 'sip2'
 
 options = {
   continue_on_error: false,
@@ -41,7 +41,7 @@ if options[:line_by_line]
   error_count = 0
   Yajl.load($stdin) do |obj|
     begin 
-      puts Sip2::Message.from_hash(obj)
+      puts Sip2.encode(obj)
     rescue Dry::Struct::Error => error
       warn "Invalid object: #{Yajl.dump(obj)}"
       if options[:continue_on_error]
@@ -63,6 +63,6 @@ if options[:line_by_line]
 else
   data = Yajl.load($stdin)
   data.each do |obj|
-    puts Sip2::Message.from_hash(obj)
+    puts Sip2.encode(obj)
   end
 end

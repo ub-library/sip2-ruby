@@ -4,27 +4,29 @@ require_relative 'fixture_helper'
 include FixtureHelper
 
 require 'sip2'
-require 'sip2/message'
 
 describe Sip2 do
 
   # Note:
   #
-  # The libraray aims to round trip all data in Sip2 messages to and from JSON.
-  # But the some the order of some delimited fields might differ after a
-  # roundtrip Sip2 -> JSON -> Sip2. This is OK, since the order of the delimited
-  # fields are not specified, and this library makes no attempt at preserving
-  # the order. But it makes it hard to verify that the round trip preserves all
-  # data since all we have to compare are the strings. And even if a Sip2
-  # message string written by this library might round trip identically through
-  # the hash representatino and back to string, that is an implementation detail
-  # and not something we should specify.
+  # This libraray aims to round trip all data in Sip2 messages to and from JSON
+  # (or a hash representation). But since delimited fields can come in any
+  # order, two Sip2 representations of the exact same data does not need to be
+  # identical. This library *makes no attempt at preserving the order* but just
+  # all data.
   #
-  # Since ruby doesn't consider key order for hashes on comparison, round trips
-  # from a hash representation to string and back to the hash representation
-  # again can be verified even if the order of fields might differ, so this is
-  # what we specify. But our fixtures are sip2 messages, so we actually
-  # round trip twice: String -> Hash -> String -> Hash
+  # But this makes it hard to verify that the round trip actually works. All we
+  # can compare are the strings, which possibly different order of the fields.
+  # And even if a Sip2 message string initially written by this library might
+  # round trip identically through parse >> encode, that is an implementation
+  # detail and not guaranteed.
+  #
+  # Since ruby doesn't consider key order for hashes when comparing for
+  # equality, round trips from the hash representation through `encode >> parse`
+  # *can* be verified, so this is what we specify.
+  #
+  # But our fixtures are Sip2 messages, so we actually round trip twice, `parse
+  # >> encode >> parse`, but we only verify the last roundtrip.
   #
   describe "round trip" do describe "Known messages" do
     KNOWN_MESSAGES_FIXTURE_CODES.each do |code|
@@ -33,12 +35,10 @@ describe Sip2 do
 
           msg = sip2_fixture(code)
 
-          it "round trips the message from hash -> to_s -> hash" do
-            hsh1 = Sip2.parse(msg).first
-            msg2 = Sip2::Message.from_hash(hsh1).to_s
-            hsh2 = Sip2.parse(msg2).first
+          it "round trips through (encode >> parse)" do
+            hsh = Sip2.parse(msg).first
 
-            assert_equal hsh1, hsh2
+            assert_equal hsh, Sip2.parse(Sip2.encode(hsh)).first
           end
         end
       end
@@ -51,13 +51,12 @@ describe Sip2 do
 
           msg = sip2_fixture(code)
 
-          it "round trips the message from hash -> to_s -> hash" do
-            hsh1 = Sip2.parse(msg).first
-            msg2 = Sip2::Message.from_hash(hsh1).to_s
-            hsh2 = Sip2.parse(msg2).first
+          it "round trips through (encode >> parse)" do
+            hsh = Sip2.parse(msg).first
 
-            assert_equal hsh1, hsh2
+            assert_equal hsh, Sip2.parse(Sip2.encode(hsh)).first
           end
+
         end
       end
     end
