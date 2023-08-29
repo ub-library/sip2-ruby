@@ -185,7 +185,7 @@ module Sip2
       ordered_fields: %i[
         circulation_status
         security_marker
-        fee_type_fixed
+        fee_type_ordered
         transaction_date
       ],
       required_delimited_fields: %i[
@@ -410,9 +410,9 @@ module Sip2
       symbol: :fee_paid,
       ordered_fields: %i[
         transaction_date
-        fee_type_fixed
+        fee_type_ordered
         payment_type
-        currency_type_fixed
+        currency_type_ordered
       ],
       required_delimited_fields: %i[
         fee_amount

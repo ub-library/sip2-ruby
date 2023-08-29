@@ -41,10 +41,11 @@ module Sip2
 
       def format_field(field_name)
         field_info = Sip2::FIELDS.fetch(field_name)
+        attribute_name = field_info.fetch(:name, field_name)
         format = field_info.fetch(:format)
 
-        if self.attributes.key?(field_name)
-          format.call(self[field_name])
+        if self.attributes.key?(attribute_name)
+          format.call(self[attribute_name])
         else
           ""
         end

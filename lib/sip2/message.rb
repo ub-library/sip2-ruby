@@ -44,15 +44,16 @@ module Sip2
 
         (ordered_fields + required_delimited_fields).each do |field_name|
           field_info = Sip2::FIELDS.fetch(field_name)
+          attribute_name = field_info.fetch(:name, field_name)
           field_type = field_info.fetch(:type)
           if field_type.is_a?(Hash)
-            attribute field_name do
+            attribute attribute_name do
               field_type.each do |subfield_name,subfield_type|
                 attribute subfield_name, subfield_type
               end
             end
           else
-            attribute field_name, field_type
+            attribute attribute_name, field_type
           end
         end
 

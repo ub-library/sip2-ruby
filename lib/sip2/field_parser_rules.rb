@@ -63,8 +63,8 @@ module Sip2
       str("BH") >> match["A-Z"].repeat(3,3).as(:str).as(:currency_type) >> pipe
     }
 
-    rule(:currency_type_fixed) {
-      match["A-Z"].repeat(3,3).as(:str).as(:currency_type_fixed)
+    rule(:currency_type_ordered) {
+      match["A-Z"].repeat(3,3).as(:str).as(:currency_type)
     }
 
     rule(:current_location) {
@@ -119,8 +119,8 @@ module Sip2
       str("BT") >> ((zero >> natural) | (natural >> digit)).as(:int).as(:fee_type) >> pipe
     }
 
-    rule(:fee_type_fixed) {
-      ((zero >> natural) | (natural >> digit)).as(:int).as(:fee_type_fixed)
+    rule(:fee_type_ordered) {
+      ((zero >> natural) | (natural >> digit)).as(:int).as(:fee_type)
     }
 
     rule(:fine_items) {

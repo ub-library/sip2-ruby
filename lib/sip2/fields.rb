@@ -131,8 +131,9 @@ module Sip2
       format: format_string,
     },
 
-    currency_type_fixed: {
+    currency_type_ordered: {
       code: "",
+      name: :currency_type,
       type: Types::String.constrained(size: 3),
       format: format_string,
     },
@@ -215,8 +216,9 @@ module Sip2
       format: format_int_2,
     },
 
-    fee_type_fixed: {
+    fee_type_ordered: {
       code: "",
+      name: :fee_type,
       type: Types::Integer.constrained(included_in: 1..99),
       format: format_int_2,
     },
