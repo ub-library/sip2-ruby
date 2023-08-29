@@ -1,9 +1,7 @@
 require 'dry-types'
 require 'dry-struct'
+require 'sip2/types'
 module Sip2
-  module Types
-    include Dry.Types()
-  end
 
   format_bool = ->(v) { v ? "Y" : "N" }
 
@@ -18,12 +16,6 @@ module Sip2
   format_int_4 = ->(v) { sprintf('%04d', v) }
 
   format_int_4_or_blank = ->(v) { v.nil? ? "    " : sprintf("%04d", v) }
-
-  format_int_4 = ->(v) { sprintf('%04d', v) }
-
-  format_int_4_or_blank = ->(v) { v.nil? ? "    " : sprintf("%04d", v) }
-
-  format_bool_nillable = ->(v) { v.nil? ? 'U' : format_bool.(v) }
 
   format_string = ->(v) { v.to_s }
 
