@@ -21,7 +21,8 @@ module Sip2
 
         def delimited_fields
           @delimited_fields ||=
-            @required_delimited_fields + @optional_delimited_fields
+            (@required_delimited_fields + @optional_delimited_fields)
+              .sort_by { |field| Sip2::FIELDS[field][:code] }
         end
 
       end
