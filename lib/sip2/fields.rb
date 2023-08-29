@@ -48,19 +48,16 @@ module Sip2
 
   FIELDS = {
     acs_renewal_policy: {
-      code: "",
       type: Types::Bool,
       format: format_bool,
     },
 
     alert: {
-      code: "",
       type: Types::Bool,
       format: format_bool,
     },
 
     available: {
-      code: "",
       type: Types::Bool,
       format: format_bool,
     },
@@ -78,7 +75,6 @@ module Sip2
     },
 
     card_retained: {
-      code: "",
       type: Types::Bool,
       format: format_bool,
     },
@@ -90,7 +86,6 @@ module Sip2
     },
 
     charged_items_count: {
-      code: "",
       type: Types::Integer.constrained(included_in: 0..9999).optional,
       format: format_int_4_or_blank,
     },
@@ -102,13 +97,11 @@ module Sip2
     },
 
     checkin_ok: {
-      code: "",
       type: Types::Bool,
       format: format_bool,
     },
 
     checkout_ok: {
-      code: "",
       type: Types::Bool,
       format: format_bool,
     },
@@ -120,7 +113,6 @@ module Sip2
     },
 
     circulation_status: {
-      code: "",
       type: Types::Integer.constrained(included_in: 0..99),
       format: format_int_2,
     },
@@ -132,7 +124,6 @@ module Sip2
     },
 
     currency_type_ordered: {
-      code: "",
       name: :currency_type,
       type: Types::String.constrained(size: 3),
       format: format_string,
@@ -145,13 +136,11 @@ module Sip2
     },
 
     date_time_sync: {
-      code: "",
       type: Types::JSON::Time,
       format: format_timestamp,
     },
 
     desensitize: {
-      code: "",
       type: Types::Bool.optional,
       format: format_bool_nillable,
     },
@@ -175,7 +164,6 @@ module Sip2
     },
 
     end_session: {
-      code: "",
       type: Types::Bool,
       format: format_bool,
     },
@@ -217,7 +205,6 @@ module Sip2
     },
 
     fee_type_ordered: {
-      code: "",
       name: :fee_type,
       type: Types::Integer.constrained(included_in: 1..99),
       format: format_int_2,
@@ -230,7 +217,6 @@ module Sip2
     },
 
     fine_items_count: {
-      code: "",
       type: Types::Integer.constrained(included_in: 0..9999).optional,
       format: format_int_4_or_blank,
     },
@@ -242,7 +228,6 @@ module Sip2
     },
 
     hold_items_count: {
-      code: "",
       type: Types::Integer.constrained(included_in: 0..9999).optional,
       format: format_int_4_or_blank,
     },
@@ -254,7 +239,6 @@ module Sip2
     },
 
     hold_mode: {
-      code: "",
       type: Types::String.constrained(size: 1),
       format: format_string,
     },
@@ -308,7 +292,6 @@ module Sip2
     },
 
     item_properties_ok: {
-      code: "",
       type: Types::String.constrained(size: 1),
       format: format_string,
     },
@@ -319,7 +302,6 @@ module Sip2
     #items: {}
 
     language: {
-      code: "",
       type: Types::Integer.constrained(included_in: (0..999)),
       format: format_int_3,
     },
@@ -349,13 +331,11 @@ module Sip2
     },
 
     magnetic_media: {
-      code: "",
       type: Types::Bool.optional,
       format: format_bool_nillable,
     },
 
     max_print_width: {
-      code: "",
       type: Types::Integer.constrained(included_in: 0..999),
       format: format_int_3,
     },
@@ -367,31 +347,26 @@ module Sip2
     },
 
     nb_due_date: {
-      code: "",
       type: Types::JSON::Time.optional,
       format: format_timestamp_or_blanks,
     },
 
     no_block: {
-      code: "",
       type: Types::Bool,
       format: format_bool,
     },
 
     offline_ok: {
-      code: "",
       type: Types::Bool,
       format: format_bool,
     },
 
     ok: {
-      code: "",
       type: Types::Bool,
       format: ->(v) { v ? "1" : "0" },
     },
 
     online_status: {
-      code: "",
       type: Types::Bool,
       format: format_bool,
     },
@@ -403,7 +378,6 @@ module Sip2
     },
 
     overdue_items_count: {
-      code: "",
       type: Types::Integer.constrained(included_in: 0..9999).optional,
       format: format_int_4_or_blank,
     },
@@ -433,7 +407,6 @@ module Sip2
     },
 
     patron_status: {
-      code: "",
       type: {
         charge_privileges_denied: Types::Bool,
         renewal_privileges_denied: Types::Bool,
@@ -456,13 +429,11 @@ module Sip2
     },
 
     payment_accepted: {
-      code: "",
       type: Types::Bool,
       format: format_bool,
     },
 
     payment_type: {
-      code: "",
       type: Types::Integer.constrained(included_in: 0..99),
       format: format_int_2,
     },
@@ -492,13 +463,11 @@ module Sip2
     },
 
     protocol_version: {
-      code: "",
       type: Types::String.constrained(format: /^\d\.\d\d$/),
       format: format_string,
     },
 
     pwd_algorithm: {
-      code: "",
       type: Types::String.constrained(size: 1),
       format: format_string,
     },
@@ -522,19 +491,16 @@ module Sip2
     },
 
     recall_items_count: {
-      code: "",
       type: Types::Integer.constrained(included_in: 0..9999).optional,
       format: format_int_4_or_blank,
     },
 
     renewal_ok: {
-      code: "",
       type: Types::Bool,
       format: format_bool,
     },
 
     renewed_count: {
-      code: "",
       type: Types::Integer.constrained(included_in: 0..9999),
       format: format_int_4_or_blank,
     },
@@ -546,25 +512,21 @@ module Sip2
     },
 
     resensitize: {
-      code: "",
       type: Types::Bool,
       format: format_bool,
     },
 
     retries_allowed: {
-      code: "",
       type: Types::Integer.constrained(included_in: 0..999),
       format: format_int_3,
     },
 
     return_date: {
-      code: "",
       type: Types::JSON::Time,
       format: format_timestamp,
     },
 
     sc_renewal_policy: {
-      code: "",
       type: Types::Bool,
       format: format_bool,
     },
@@ -582,7 +544,6 @@ module Sip2
     },
 
     security_marker: {
-      code: "",
       type: Types::Integer.constrained(included_in: 0..99),
       format: format_int_2,
     },
@@ -606,19 +567,16 @@ module Sip2
     },
 
     status_code: {
-      code: "",
       type: Types::Integer.constrained(included_in: 0..2),
       format: format_string,
     },
 
     status_update_ok: {
-      code: "",
       type: Types::Bool,
       format: format_bool,
     },
 
     summary: {
-      code: "",
       type: {
         hold_items: Types::Bool,
         overdue_items: Types::Bool,
@@ -670,13 +628,11 @@ module Sip2
     },
 
     third_party_allowed: {
-      code: "",
       type: Types::Bool,
       format: format_bool,
     },
 
     timeout_period: {
-      code: "",
       type: Types::Integer.constrained(included_in: 0..999),
       format: format_int_3,
     },
@@ -688,7 +644,6 @@ module Sip2
     },
 
     transaction_date: {
-      code: "",
       type: Types::JSON::Time,
       format: format_timestamp,
     },
@@ -700,13 +655,11 @@ module Sip2
     },
 
     uid_algorithm: {
-      code: "",
       type: Types::String.constrained(size: 1),
       format: format_string,
     },
 
     unavailable_holds_count: {
-      code: "",
       type: Types::Integer.constrained(included_in: 0..9999).optional,
       format: format_int_4_or_blank,
     },
@@ -718,7 +671,6 @@ module Sip2
     },
 
     unrenewed_count: {
-      code: "",
       type: Types::Integer.constrained(included_in: 0..9999),
       format: format_int_4,
     },
