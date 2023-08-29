@@ -16,7 +16,6 @@ module Sip2
         patron_identifier
         terminal_password
       ],
-      # TODO: Move any optional fields for Block Patron here
       optional_delimited_fields: [],
     },
     {
@@ -127,19 +126,19 @@ module Sip2
         transaction_date
       ],
       required_delimited_fields: %i[
+        institution_id
+        patron_identifier
+      ],
+      optional_delimited_fields: %i[
         expiration_date
         pickup_location
         hold_type
-        institution_id
-        patron_identifier
         patron_password
         item_identifier
         title_identifier
         terminal_password
         fee_acknowledged
       ],
-      # TODO: Move any optional fields for Hold here
-      optional_delimited_fields: [],
     },
     {
       code: "16",
@@ -151,18 +150,18 @@ module Sip2
         transaction_date
       ],
       required_delimited_fields: %i[
+        institution_id
+        patron_identifier
+      ],
+      optional_delimited_fields: %i[
         expiration_date
         queue_position
         pickup_location
-        institution_id
-        patron_identifier
         item_identifier
         title_identifier
         screen_message
         print_line
       ],
-      # TODO: Move any optional fields for Hold Response here
-      optional_delimited_fields: [],
     },
     {
       code: "17",
@@ -219,11 +218,11 @@ module Sip2
       required_delimited_fields: %i[
         institution_id
         item_identifier
-        terminal_password
         item_properties
       ],
-      # TODO: Move any optional fields for Item Status Update here
-      optional_delimited_fields: [],
+      optional_delimited_fields: %i[
+        terminal_password
+      ],
     },
     {
       code: "20",
@@ -235,13 +234,13 @@ module Sip2
       ],
       required_delimited_fields: %i[
         item_identifier
+      ],
+      optional_delimited_fields: %i[
         title_identifier
         item_properties
         screen_message
         print_line
       ],
-      # TODO: Move any optional fields for Item Status Update Response here
-      optional_delimited_fields: [],
     },
     {
       code: "23",
@@ -257,7 +256,6 @@ module Sip2
         terminal_password
         patron_password
       ],
-      # TODO: Move any optional fields for Patron Status Request here
       optional_delimited_fields: [],
     },
     {
@@ -273,6 +271,8 @@ module Sip2
         institution_id
         patron_identifier
         personal_name
+      ],
+      optional_delimited_fields: %i[
         valid_patron
         valid_patron_password
         currency_type
@@ -280,8 +280,6 @@ module Sip2
         screen_message
         print_line
       ],
-      # TODO: Move any optional fields for Patron Status Response here
-      optional_delimited_fields: [],
     },
     {
       code: "25",
@@ -293,11 +291,11 @@ module Sip2
       required_delimited_fields: %i[
         institution_id
         patron_identifier
+      ],
+      optional_delimited_fields: %i[
         terminal_password
         patron_password
       ],
-      # TODO: Move any optional fields for Patron Enable here
-      optional_delimited_fields: [],
     },
     {
       code: "26",
@@ -312,13 +310,13 @@ module Sip2
         institution_id
         patron_identifier
         personal_name
+      ],
+      optional_delimited_fields: %i[
         valid_patron
         valid_patron_password
         screen_message
         print_line
       ],
-      # TODO: Move any optional fields for Patron Enable Response here
-      optional_delimited_fields: [],
     },
     {
       code: "29",
@@ -333,6 +331,8 @@ module Sip2
       required_delimited_fields: %i[
         institution_id
         patron_identifier
+      ],
+      optional_delimited_fields: %i[
         patron_password
         item_identifier
         title_identifier
@@ -340,8 +340,6 @@ module Sip2
         item_properties
         fee_acknowledged
       ],
-      # TODO: Move any optional fields for Renew here
-      optional_delimited_fields: [],
     },
     {
       code: "30",
@@ -360,6 +358,8 @@ module Sip2
         item_identifier
         title_identifier
         due_date
+      ],
+      optional_delimited_fields: %i[
         fee_type
         security_inhibit
         currency_type
@@ -370,8 +370,6 @@ module Sip2
         screen_message
         print_line
       ],
-      # TODO: Move any optional fields for Renew Response here
-      optional_delimited_fields: [],
     },
     {
       code: "35",
@@ -414,19 +412,19 @@ module Sip2
         transaction_date
         fee_type_fixed
         payment_type
+        currency_type_fixed
       ],
       required_delimited_fields: %i[
-        currency_type
         fee_amount
         institution_id
         patron_identifier
+      ],
+      optional_delimited_fields: %i[
         terminal_password
         patron_password
         fee_identifier
         transaction_id
       ],
-      # TODO: Move any optional fields for Fee Paid here
-      optional_delimited_fields: [],
     },
     {
       code: "38",
@@ -439,12 +437,12 @@ module Sip2
       required_delimited_fields: %i[
         institution_id
         patron_identifier
+      ],
+      optional_delimited_fields: %i[
         transaction_id
         screen_message
         print_line
       ],
-      # TODO: Move any optional fields for Fee Paid Response here
-      optional_delimited_fields: [],
     },
     {
       code: "63",
@@ -513,12 +511,12 @@ module Sip2
       required_delimited_fields: %i[
         institution_id
         patron_identifier
+      ],
+      optional_delimited_fields: %i[
         patron_password
         terminal_password
         fee_acknowledged
       ],
-      # TODO: Move any optional fields for Renew All here
-      optional_delimited_fields: [],
     },
     {
       code: "66",
@@ -532,13 +530,13 @@ module Sip2
       ],
       required_delimited_fields: %i[
         institution_id
+      ],
+      optional_delimited_fields: %i[
         renewed_items
         unrenewed_items
         screen_message
         print_line
       ],
-      # TODO: Move any optional fields for Renew All Response here
-      optional_delimited_fields: [],
     },
     {
       code: "93",
@@ -551,10 +549,10 @@ module Sip2
       required_delimited_fields: %i[
         login_user_id
         login_password
+      ],
+      optional_delimited_fields: %i[
         location_code
       ],
-      # TODO: Move any optional fields for Login here
-      optional_delimited_fields: [],
     },
     {
       code: "94",

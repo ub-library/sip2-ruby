@@ -131,6 +131,12 @@ module Sip2
       format: format_string,
     },
 
+    currency_type_fixed: {
+      code: "",
+      type: Types::String.constrained(size: 3),
+      format: format_string,
+    },
+
     current_location: {
       code: "AP",
       type: Types::String.constrained(max_size: 255),

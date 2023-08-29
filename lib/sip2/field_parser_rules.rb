@@ -63,6 +63,10 @@ module Sip2
       str("BH") >> match["A-Z"].repeat(3,3).as(:str).as(:currency_type) >> pipe
     }
 
+    rule(:currency_type_fixed) {
+      match["A-Z"].repeat(3,3).as(:str).as(:currency_type_fixed)
+    }
+
     rule(:current_location) {
       str("AP") >> variable_length_value.as(:current_location) 
     }
