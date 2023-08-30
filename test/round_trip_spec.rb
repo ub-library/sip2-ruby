@@ -28,8 +28,9 @@ describe Sip2 do
   # But our fixtures are Sip2 messages, so we actually round trip twice, `parse
   # >> encode >> parse`, but we only verify the last roundtrip.
   #
-  describe "round trip" do describe "Known messages" do
-    KNOWN_MESSAGES_FIXTURE_CODES.each do |code|
+  describe "round trip" do
+    describe "Known messages" do
+      KNOWN_MESSAGES_FIXTURE_CODES.each do |code|
 
         describe code do
 
@@ -47,6 +48,22 @@ describe Sip2 do
     describe "Unknown messages" do
       UNKNOWN_MESSAGES_FIXTURE_CODES.each do |code|
 
+        describe code do
+
+          msg = sip2_fixture(code)
+
+          it "round trips through (encode >> parse)" do
+            hsh = Sip2.parse(msg).first
+
+            assert_equal hsh, Sip2.parse(Sip2.encode(hsh)).first
+          end
+
+        end
+      end
+    end
+
+    describe "Known messages with unexpected fields" do
+      MESSAGES_WITH_EXTRA_FIELDS_FIXTURE_CODES.each do |code|
         describe code do
 
           msg = sip2_fixture(code)

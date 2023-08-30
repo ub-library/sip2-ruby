@@ -110,6 +110,36 @@ describe Sip2 do
         assert_kind_of Hash, result.last
       end
     end
+
+    describe "Messages with unexpected fields" do
+      let(:messages) {
+        [
+          "9900302.00XXSomeExtraValue|\r",
+        ]
+      }
+
+      it "reads a single unexpected field into an array" do
+        result = Sip2.parse("9900302.00XXSome Unexpected Value|\r")
+
+        assert_equal(
+          [{ code: "XX", value: "Some Unexpected Value" }],
+          result.first[:unexpected_fields]
+        )
+      end
+
+      it "reads multiple unexpected fields into an array" do
+        result = Sip2.parse("9900302.00XXSome Unexpected Value|ZZAnother Unexpected Value|\r")
+
+        assert_equal(
+          [
+            { code: "XX", value: "Some Unexpected Value" },
+            { code: "ZZ", value: "Another Unexpected Value" },
+          ],
+          result.first[:unexpected_fields]
+        )
+      end
+
+    end
   end 
 
 end

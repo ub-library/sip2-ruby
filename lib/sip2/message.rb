@@ -71,6 +71,11 @@ module Sip2
           end
         end
 
+        attribute? :unexpected_fields, Types::Array do
+          attribute :code, Types::String
+          attribute :value, Types::String
+        end
+
         unless [:request_asc_resend, :request_sc_resend].include?(symbol)
           attribute? :sequence_number, Types::Integer.constrained(included_in: 0..9)
         end

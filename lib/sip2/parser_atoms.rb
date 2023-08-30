@@ -37,6 +37,10 @@ module Sip2
       hour.as(:int).as(:hour) >> minute.as(:int).as(:minute) >> second.as(:int).as(:second)
     }
 
+    rule(:any_field_identifier) {
+      match["0-9A-Za-z"].repeat(2,2).as(:str)
+    }
+
     rule(:pipe) { str("|") }
 
     rule(:four_digits_or_blanks) {

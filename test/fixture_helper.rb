@@ -15,6 +15,11 @@ module FixtureHelper
     XX
   ]
 
+  MESSAGES_WITH_EXTRA_FIELDS_FIXTURE_CODES = %w[
+    98-with-unexpected
+    99-with-unexpected
+  ]
+
   def sip2_fixture_path(code)
     File.join(FIXTURE_DIR, "#{code}.sip2")
   end

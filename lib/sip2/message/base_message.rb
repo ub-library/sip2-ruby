@@ -92,14 +92,31 @@ module Sip2
         end
       end
 
-      def encode(add_error_detection: true, checksum_encoder: nil)
+      def format_unexpected_field(code:, value:)
+        sprintf("%s%s|", code, value)
+      end
+
+      def format_unexpected_fields
+
+        if self.attributes.key?(:unexpected_fields)
+          Array(self[:unexpected_fields])
+            .map { |f| format_unexpected_field(**f) }
+            .join
+        else
+          ""
+        end
+      end
+
+      def encode(add_error_detection: true, checksum_encoder: nil, strip_extra_fields: false)
         message = sprintf(
-          "%<code>s%<ordered_fields>s%<delimited_fields>s",
+          "%<code>s%<ordered_fields>s%<delimited_fields>s%<unexpected_fields>s",
           code: self.class::CODE,
           ordered_fields:
             ordered_fields.map { |f| format_field(f) }.join,
           delimited_fields:
             delimited_fields.map { |f| format_field(f) }.join,
+          unexpected_fields:
+            if strip_extra_fields then "" else format_unexpected_fields end
         )
         error_detection =
           if add_error_detection 

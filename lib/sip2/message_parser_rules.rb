@@ -30,6 +30,18 @@ module Sip2
       ( checksum | empty_hash ).as(:error_detection)
     }
 
+    rule(:unexpected_field) {
+      (
+        any_field_identifier.as(:code) >>
+        any_valid.repeat.as(:str).as(:value) >>
+        pipe
+      )
+    }
+
+    rule(:unexpected_fields) {
+      unexpected_field.as(:unexpected_fields).as(:merge_repeat_to_array)
+    }
+
     rule(:known_message_id) {
       Sip2::MESSAGES_BY_CODE.keys.map { |s| str(s) }.inject { |res,a| res | a }
     }
@@ -51,7 +63,8 @@ module Sip2
       ordered = msg.fetch(:ordered_fields)
       required_delimited = msg.fetch(:required_delimited_fields)
       optional_delimited = msg.fetch(:optional_delimited_fields)
-      delimited = required_delimited + optional_delimited
+      unexpected_delimited = [ :unexpected_fields ]
+      delimited = required_delimited + optional_delimited + unexpected_delimited
 
       rule(msg[:symbol]) {
         str(msg[:code]).as(:str).as(:message_code).as(:message_identifiers) >>

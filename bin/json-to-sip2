@@ -13,6 +13,7 @@ options = {
   debug: false,
   error_detection: false,
   line_by_line: true,
+  strip_extra_fields: false,
 }
 OptionParser.new do |opts|
   opts.banner = "Usage: #{$0} [options]"
@@ -44,6 +45,13 @@ OptionParser.new do |opts|
          ) do |name|
            options[:error_detection] = true
   end
+
+  opts.on("--strip-extra-fields",
+          "Remove extra fields that are not part of the specification.",
+         ) do
+           options[:strip_extra_fields] = true
+         end
+
   opts.on("-h", "--help", "Display this message.") do
     puts opts
     exit
@@ -60,14 +68,15 @@ encode = ->(obj) {
   Sip2.encode(
     obj,
     add_error_detection: options[:error_detection],
-    checksum_encoder: checksum_encoder
+    checksum_encoder: checksum_encoder,
+    strip_extra_fields: options[:strip_extra_fields]
   )
 }
 
 if options[:line_by_line]
   error_count = 0
   Yajl.load($stdin) do |obj|
-    begin 
+    begin
       puts encode.call(obj)
     rescue Dry::Struct::Error => error
       warn "Invalid object: #{Yajl.dump(obj)}"
