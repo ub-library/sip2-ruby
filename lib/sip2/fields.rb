@@ -724,15 +724,20 @@ module Sip2
 
   FIELDS.each do |k,v|
     code = v.fetch(:code,"")
-    if [:sequence_number, :checksum].include?(k)
-      formatter = format_error_correction.call(code, v.fetch(:format))
-      FIELDS[k] = v.merge(format: formatter)
-    elsif [:print_line, :screen_message].include?(k)
-      FIELDS[k][:format] = format_coded_array.call(code, v.fetch(:format))
-    elsif code != ""
-      formatter = format_coded.call(code, v.fetch(:format))
-      FIELDS[k] = v.merge(format: formatter)
-    end
+    original_formatter = v.fetch(:format)
+
+    final_formatter =
+      if [:sequence_number, :checksum].include?(k)
+        format_error_correction.call(code, original_formatter)
+      elsif [:print_line, :screen_message].include?(k)
+        format_coded_array.call(code, original_formatter)
+      elsif code != ""
+        format_coded.call(code, original_formatter)
+      else
+        original_formatter
+      end
+
+    FIELDS[k] = v.merge(format: final_formatter)
   end
 
 
