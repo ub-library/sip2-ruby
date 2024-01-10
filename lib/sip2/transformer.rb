@@ -43,6 +43,7 @@ module Sip2
       minute: simple(:minute),
       second: simple(:second)
     ) {
+      zone = nil if zone == "    "
       Time.new(year, month, day, hour, minute, second, zone)
     }
 

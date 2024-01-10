@@ -96,3 +96,20 @@ and through `#[]`):
 
 The pre defined encoders are also available for `json-to-sip2` through the
 command line option `--checksum-encoder`.
+
+## Caveats
+
+Time zones are not fully implemented and do not round trip. The Sip2
+specification declares that time zones should be expressed according to ancient
+ANSI standard X3.43, which in its turn refers to X3.51. This standard is
+mentioned in RFC822, which specifies a few two or three letter codes, "military"
+one letter time zone codes, and explicit offset using four digits prefixed with
+"+" or "-". The prefixed digits will not fit in the designated four character
+segment.
+
+In this library only "Z" for "UTC" and "    " (four spaces, no time zone) are
+round tripped. When parsing, "Z" and "UTC" will be parsed as times with UTC
+time zone, four blanks will be parsed as local time, and military one letter
+time zone codes will be parsed into times with the correct offset but with no
+`#zone` set. When encoding, times in UTC will be encoded as "Z", and all other
+times, including local time, will be encoded without time zone data.

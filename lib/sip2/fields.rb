@@ -35,10 +35,8 @@ module Sip2
 
   # TODO: Proper roundtrip of one letter time zones?
   format_timestamp = ->(v) {
-    tz = sprintf("%4s", v.utc? ? "Z" : String(v.zone))
-    if tz == Time.now.getlocal.zone
-      tz = sprintf("%4s","")
-    end
+    tz = v.utc? ? "Z" : ""
+    tz = sprintf("%4s", tz)
     v.strftime("%Y%m%d#{tz}%H%M%S")
   }
 
