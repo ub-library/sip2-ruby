@@ -1,3 +1,4 @@
+require 'sip2/version'
 require 'sip2/parser'
 require 'sip2/transformer'
 require 'sip2/message'

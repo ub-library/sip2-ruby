@@ -1,2 +1,9 @@
+/.bundle/
 /.redo/
+/.yardoc
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/tmp/
 /vendor/

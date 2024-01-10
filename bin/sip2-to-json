@@ -32,6 +32,11 @@ OptionParser.new do |opts|
     options[:debug] = true
   end
 
+  opts.on("-v", "--version", "Print version and exit.") do
+    puts Sip2::VERSION
+    exit
+  end
+
   opts.on("-h", "--help", "Display this message.") do
     puts opts
     exit
