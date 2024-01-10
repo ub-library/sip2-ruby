@@ -21,17 +21,12 @@ Gem::Specification.new do |spec|
   spec.metadata["source_code_uri"] = "TODO: Put your gem's public repo URL here."
   spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
 
-  # Specify which files should be added to the gem when it is released.
-  # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
-  spec.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
-    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
-    s.files = Dir.glob("{lib,test}/**/*") + %w[
+  spec.files = Dir.glob("{lib,test}/**/*") + %w[
       LICENSE.txt
       Rakefile
-      README.ms
+      README.md
       sip2-parser.gemspec
     ]
-  end
   spec.bindir        = "bin"
   spec.executables   = %w[sip2-to-json json-to-sip2]
   spec.require_paths = %w[lib]
