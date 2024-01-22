@@ -26,7 +26,7 @@ sip2-to-json < sip2.log > sip2-log.json
 json-to-sip2 < sip2-log.json > sip2.txt
 ```
 
-Normally sip2.log and sip2.txt should now be semantically identical. (Field
+Normally `sip2.log` and `sip2.txt` should now be semantically identical. (Field
 order might differ.)
 
 Typically `sip2-to-json` can be used to view, query and filter logs, while
@@ -39,7 +39,7 @@ sip2-to-json < sip2.log | your-script-here | json-to-sip2
 
 ### As a library
 
-The main interfaces are two functions on the Sip2 module: `Sip2.parse` and
+The main interfaces are two functions on the `Sip2` module: `Sip2.parse` and
 `Sip2.encode`.
 
 ```ruby
@@ -61,11 +61,13 @@ Sip2.encode(parsed_message)
 `Sip2.parse` only accepts well formed messages, but handles invalid dates in a
 possibly unexpected way. It enforces *date-like* values, but would accept e.g.
 "2023-02-30" *and convert it* to 2023-03-02. Messages that are not well formed
-will cause a Parslet::ParseFailed error to be raised. See [Parslet
+will cause a `Parslet::ParseFailed` error to be raised. See [Parslet
 documentation][parslet-docs] for how to get more information from the error.
 
+[parslet-docs]: https://kschiess.github.io/parslet/documentation.html
+
 `Sip2.encode` enforces the type of all values and outputs valid Sip2
-messages. On most type errors, a Dry::Struct::Error will be raised.
+messages. On most type errors, a `Dry::Struct::Error` will be raised.
 
 Unrecognized message types and unrecognized fields for recognized messages are
 accepted, in accordance with the Sip2 standard. The data is captured and can
@@ -104,12 +106,12 @@ specification declares that time zones should be expressed according to ancient
 ANSI standard X3.43, which in its turn refers to X3.51. This standard is
 mentioned in RFC822, which specifies a few two or three letter codes, "military"
 one letter time zone codes, and explicit offset using four digits prefixed with
-"+" or "-". The prefixed digits will not fit in the designated four character
+`+` or `-`. The prefixed digits will not fit in the designated four character
 segment.
 
-In this library only "Z" for "UTC" and "    " (four spaces, no time zone) are
-round tripped. When parsing, "Z" and "UTC" will be parsed as times with UTC
-time zone, four blanks will be parsed as local time, and military one letter
-time zone codes will be parsed into times with the correct offset but with no
-`#zone` set. When encoding, times in UTC will be encoded as "Z", and all other
-times, including local time, will be encoded without time zone data.
+In this library only `Z` for "UTC" and `    ` (four spaces, no time zone) are
+round tripped. When parsing, `Z` and `UTC` will be parsed as times with UTC time
+zone, four blanks will be parsed as local time, and military one letter time
+zone codes will be parsed into times with the correct offset but with no
+`Time#zone` set. When encoding, times in UTC will be encoded as `Z`, and all
+other times, including local time, will be encoded without time zone data.
