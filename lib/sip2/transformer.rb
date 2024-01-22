@@ -59,7 +59,6 @@ module Sip2
       {
         message_code: x,
         message_name: message_type.fetch(:name),
-#        message_symbol: message_type.fetch(:symbol)
       }
     }
 
