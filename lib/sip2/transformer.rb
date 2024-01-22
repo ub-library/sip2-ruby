@@ -67,9 +67,7 @@ module Sip2
         if el.key?(:merge_repeat_to_array)
           real = el.fetch(:merge_repeat_to_array)
           real.map { |k,v|
-            ary = hsh.fetch(k) { [] }
-            ary << v
-            hsh[k] = ary
+            hsh.fetch(k) { hsh[k] = [] } << v
           }
         else
           hsh.merge!(el)
