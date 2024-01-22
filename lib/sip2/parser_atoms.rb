@@ -41,8 +41,6 @@ module Sip2
       match["0-9A-Za-z"].repeat(2,2).as(:str)
     }
 
-    rule(:pipe) { str("|") }
-
     rule(:four_digits_or_blanks) {
       digit.repeat(4,4).as(:int) | space.repeat(4,4).as(:nil)
     }
