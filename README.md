@@ -1,4 +1,4 @@
-# Sip2
+# Sip2 (sip2-ruby)
 
 Sip2 is a library for parsing and encoding messages in the Sip2 standard used
 for communication between library automation devices and automated circulation

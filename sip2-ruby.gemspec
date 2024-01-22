@@ -1,7 +1,7 @@
 require_relative 'lib/sip2/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "sip2-parser"
+  spec.name          = "sip2-ruby"
   spec.version       = Sip2::VERSION
   spec.authors       = ["Daniel Sandbecker"]
   spec.email         = ["daniel.sandbecker@hb.se"]
@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
       LICENSE.txt
       Rakefile
       README.md
-      sip2-parser.gemspec
+      sip2-ruby.gemspec
     ]
   spec.bindir        = "bin"
   spec.executables   = %w[sip2-to-json json-to-sip2]
