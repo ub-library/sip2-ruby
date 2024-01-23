@@ -16,7 +16,7 @@ describe Sip2 do
   # all data.
   #
   # But this makes it hard to verify that the round trip actually works. All we
-  # can compare are the strings, which possibly different order of the fields.
+  # can compare are the strings, with possibly different order of the fields.
   # And even if a Sip2 message string initially written by this library might
   # round trip identically through parse >> encode, that is an implementation
   # detail and not guaranteed.
