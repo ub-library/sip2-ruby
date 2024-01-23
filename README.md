@@ -1,9 +1,11 @@
 # Sip2 (sip2-ruby)
 
-Sip2 is a library for parsing and encoding messages in the Sip2 standard used
-for communication between library automation devices and automated circulation
-systems. It is also two executables, `sip2-to-json` and `json-to-sip2`, for
-parsing and encoding respectively.
+Sip2 is a library for parsing and encoding messages in the [Sip2 standard][sip2]
+used for communication between library automation devices and automated
+circulation systems. It is also two executables, `sip2-to-json` and
+`json-to-sip2`, for parsing and encoding respectively.
+
+[sip2]: https://developers.exlibrisgroup.com/wp-content/uploads/2020/01/3M-Standard-Interchange-Protocol-Version-2.00.pdf
 
 Sip2 messages are parsed into a Hash/JSON representation, and the
 Hash/JSON representation can be converted back into Sip2 format.
