@@ -17,11 +17,14 @@ Gem::Specification.new do |spec|
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
+  spec.metadata["changelog_uri"] = spec.homepage + "/CHANGES.md"
 
   spec.files = Dir.glob("{lib,test}/**/*") + %w[
       LICENSE.txt
-      Rakefile
       README.md
+      Rakefile
+      environment.rb
+      script/sip2-messages-info
       sip2-ruby.gemspec
     ]
   spec.bindir        = "bin"
