@@ -41,7 +41,7 @@ sip2-to-json < sip2.log | your-script-here | json-to-sip2
 
 ### As a library
 
-The main interfaces are two functions on the `Sip2` module: `Sip2.parse` and
+The main interfaces are two methods on the `Sip2` module: `Sip2.parse` and
 `Sip2.encode`.
 
 ```ruby
@@ -102,6 +102,23 @@ The pre defined encoders are also available for `json-to-sip2` through the
 command line option `--checksum-encoder`.
 
 ## Caveats
+
+### Documentation
+
+*Note that the ruby code is currently entirely undocumented.* This is due to
+much of it being dynamically generated from a code representation of the Sip2
+standard, and I simply do not know how to let rdoc or yard pick this up. The
+parts that are static can of course be documented, but as they read or return
+the dynamically generated message classes the documentation would still be
+incomplete.
+
+Running `script/sip2-messages-info` will output a JSON representation of all
+known messages and the fields they include. There is also a JSON representation
+of all fields in `doc/sip2_fields.json`. These two sources can be used to some
+extent to see how the mapping between the Sip2 format and the Hash/JSON
+representation looks like.
+
+### Time Zones
 
 Time zones are not fully implemented and do not round trip. The Sip2
 specification declares that time zones should be expressed according to ancient
