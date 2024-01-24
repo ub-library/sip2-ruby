@@ -1,7 +1,9 @@
+/*.gem
 /.bundle/
 /.envrc
 /.redo/
 /.yardoc
+/Gemfile.lock
 /_yardoc/
 /coverage/
 /doc/
