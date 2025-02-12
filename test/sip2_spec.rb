@@ -140,6 +140,56 @@ describe Sip2 do
       end
 
     end
-  end 
+
+    describe "Messages with duplicate fields" do
+      let(:base_message) { sip2_fixture("18") }
+
+      it "combines repeatable fields into arrays" do
+        # Insert print_line fields after the title field
+        msg = base_message.sub(
+          "|AJSome example title by Some Author|",
+          "|AJSome example title by Some Author|AGFirst print line|AGSecond print line|"
+        )
+
+        result = Sip2.parse(msg).first
+        assert_equal ["First print line", "Second print line"], result[:print_line]
+      end
+
+      it "keeps last value for duplicate non-repeatable fields" do
+        # Insert duplicate location field after the first one
+        msg = base_message.sub(
+          "|APSomeLocation|",
+          "|APFirstLocation|APSecondLocation|"
+        )
+
+        result = Sip2.parse(msg).first
+        assert_equal "SecondLocation", result[:current_location]
+      end
+
+      it "warns about duplicate non-repeatable fields" do
+        msg = base_message.sub(
+          "|APSomeLocation|",
+          "|APFirstLocation|APSecondLocation|"
+        )
+
+        assert_output(nil, /Overwriting duplicate field: current_location/) do
+          Sip2.parse(msg)
+        end
+      end
+
+      it "handles multiple types of repeatable fields in any order" do
+        msg = base_message.sub(
+          "|AJSome example title by Some Author|",
+          "|AJSome example title by Some Author|" \
+            "AGFirst print line|AFFirst screen msg|" \
+            "AFSecond screen msg|AGSecond print line|"  # Interspersed order
+        )
+
+        result = Sip2.parse(msg).first
+        assert_equal ["First print line", "Second print line"], result[:print_line]
+        assert_equal ["First screen msg", "Second screen msg"], result[:screen_message]
+      end
+    end
+  end
 
 end

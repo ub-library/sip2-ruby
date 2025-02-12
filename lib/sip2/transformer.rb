@@ -70,7 +70,10 @@ module Sip2
             hsh.fetch(k) { hsh[k] = [] } << v
           }
         else
-          hsh.merge!(el)
+          el.each do |k,v|
+            warn "Overwriting duplicate field: #{k}" if hsh.key?(k)
+            hsh[k] = v
+          end
         end
       }
     }
