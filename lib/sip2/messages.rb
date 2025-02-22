@@ -619,7 +619,10 @@ module Sip2
       required_delimited_fields: [],
       optional_delimited_fields: [],
     },
-  ]
+  ].map { |msg|
+    msg[:symbol] = msg[:name].downcase.gsub(" ", "_").to_sym
+    msg
+  }
 
   MESSAGES_BY_CODE = MESSAGES
     .group_by { |m| m[:code] }
