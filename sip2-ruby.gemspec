@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   EOS
   spec.homepage      = "https://github.com/ub-library/sip2-ruby"
   spec.license       = "MIT"
-  spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
+  spec.required_ruby_version = Gem::Requirement.new(">= 2.6.0")
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
@@ -30,7 +30,7 @@ Gem::Specification.new do |spec|
   spec.executables   = %w[sip2-to-json json-to-sip2]
   spec.require_paths = %w[lib]
 
-  spec.add_runtime_dependency "dry-struct", "~> 1.4"
+  spec.add_runtime_dependency "dry-struct", ">= 1.4", "< 1.9"
   spec.add_runtime_dependency "parslet", "~> 2.0"
   spec.add_runtime_dependency "yajl-ruby", "~> 1.4"
 
