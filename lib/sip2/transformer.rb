@@ -9,7 +9,7 @@ module Sip2
     rule(nil: simple(:_)) { nil }
     rule(empty_hash: simple(:_)) { {} }
 
-    rule(int: simple(:x)) { Integer(x) }
+    rule(int: simple(:x)) { Integer(x, 10) }
 
     rule(int: sequence(:x)) { x.empty? ? 0 : x }
 
